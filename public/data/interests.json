@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "description": "Sports"
+  },
+  {
+    "id": "2",
+    "description": "Music"
+  },
+  {
+    "id": "3",
+    "description": "Reading"
+  },
+  {
+    "id": "4",
+    "description": "Traveling"
+  },
+  {
+    "id": "5",
+    "description": "Cooking"
+  }
+]

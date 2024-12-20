@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "name": "John",
+    "lastName": "Doe",
+    "identification": "12345678",
+    "phoneNumber": "+123456789",
+    "otherPhone": "+987654321",
+    "address": "123 Main St, Springfield",
+    "birthDate": "1990-01-15",
+    "affiliateDate": "2020-05-12",
+    "gender": "M",
+    "personalSummary": "A loyal client interested in technology and sports.",
+    "image": null,
+    "interests": ["1", "3"]
+  },
+  {
+    "id": "2",
+    "name": "Jane",
+    "lastName": "Smith",
+    "identification": "87654321",
+    "phoneNumber": "+111222333",
+    "otherPhone": "+444555666",
+    "address": "456 Elm St, Springfield",
+    "birthDate": "1985-10-20",
+    "affiliateDate": "2018-03-25",
+    "gender": "F",
+    "personalSummary": "A dedicated client with a passion for music and cooking.",
+    "image": "data:image/png;base64,...",
+    "interests": ["2", "5"]
+  }
+]
