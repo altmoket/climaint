@@ -7,8 +7,10 @@ const GlobalContext = createContext();
 const globalReducer = (state, action) => {
   switch (action.type) {
     case 'SET_TOKEN':
+      localStorage.setItem('token', action.payload)
       return { ...state, token: action.payload };
     case 'SET_USERID':
+      localStorage.setItem('userId', action.payload)
       return { ...state, userId: action.payload };
     default:
       throw new Error(`Unknown action: ${action.type}`);
@@ -18,8 +20,8 @@ const globalReducer = (state, action) => {
 // Provider component
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, {
-    token: null, // Initialize token as null
-    userID: null // Initialize userId as null
+    token: localStorage.getItem('token'),
+    userID: localStorage.getItem('userId')
   });
 
   return (
