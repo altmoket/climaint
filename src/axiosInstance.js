@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3000/data'
+const baseURL = 'https://pruebareactjs.test-class.com/Api/'
 
-const axiosInstance = axios.create({baseURL: baseURL})
+const axiosInstance = axios.create({baseURL: baseURL, timeout: 5000})
 
 export default axiosInstance
