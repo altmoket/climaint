@@ -1,27 +1,35 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import { Box, Divider, Grid, Stack} from '@mui/material';
+import ResponsiveAppBar from '../components/ResponsiveAppBar';
+import Leftbar from '../components/Leftbar';
 
 const Layout = () => {
   return (
-    <div>
-      <header>
-        <nav>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/register">Register</Link></li>
-            <li><Link to="/client-consult">Client Consult</Link></li>
-            <li><Link to="/client-maintance">Client Maintance</Link></li>
-          </ul>
-        </nav>
-      </header>
-      <main>
-        <Outlet /> {/* This is where the routed component will render */}
-      </main>
-      <footer>
-        <p>My App Footer</p>
-      </footer>
-    </div>
+    <>
+      <ResponsiveAppBar />
+      {/* <Divider></Divider> */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        {/* <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+          <Grid item md={4} lg={3} display={{ xs: 'none', md: 'block' }} flex={true}>
+            <Leftbar />
+          </Grid>
+          <Grid item bgcolor={"red"} display="flex" justifyContent="center" height="100%">
+            <Box sx={{ textAlign: 'center' }}> 
+              <Outlet />
+            </Box>
+          </Grid>
+        </Grid> */}
+        <Stack direction={"row"}>
+          <Box width={"20%"}>
+            <Leftbar />
+          </Box>
+          <Box width={"stretch"}>
+            <Outlet />
+          </Box>
+        </Stack>
+      </Box>
+    </>
   );
 };
 

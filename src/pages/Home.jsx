@@ -1,12 +1,15 @@
-import { Typography } from '@mui/material';
-import React from 'react';
+import { Typography, Container } from '@mui/material';
 
 function Home() {
   return (
-    <>
-      <Typography>aaaa</Typography>
-      <p>a</p>
-    </>
+    <Container maxWidth="sm" sx={{ textAlign: 'center', marginTop: 5 }}>
+      <Typography variant="h3" gutterBottom>
+        ¡Bienvenido!
+      </Typography>
+      <Typography variant="h6" color="textSecondary">
+        Estamos felices de tenerte aquí.
+      </Typography>
+    </Container>
   );
 }
 
