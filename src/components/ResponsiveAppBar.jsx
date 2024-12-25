@@ -17,7 +17,7 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Toolbar>
         {/* Menu icon */}
-        <Box sx={{ display: { xs: 'block', sm: 'none' }, mr: '5px' }}>
+        <Box sx={{ display: { xs: 'block', sm: 'block', md: 'flex' }, mr: '5px' }}>
           <IconButton onClick={handleOpenNavMenu} color="inherit">
             <MenuIcon fontSize="large" />
           </IconButton>
@@ -27,7 +27,6 @@ function ResponsiveAppBar() {
           variant="h6"
           sx={{
             mr: 2,
-            display: { xs: 'none', md: 'flex' },
             fontFamily: 'monospace',
             fontWeight: 700,
             letterSpacing: '.3rem',
