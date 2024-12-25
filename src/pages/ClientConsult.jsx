@@ -1,98 +1,108 @@
 import React, { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/globalContext';
-import axiosInstance from '../axiosInstance';
-
-export const getInterests = async (token) => {
-  try {
-    const response = await axiosInstance.get('api/Intereses/Listado', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching interests:', error);
-    return [];
-  }
-};
+import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Typography,
+  Alert,
+  Stack,
+} from '@mui/material';
+import SearchBar from '../components/SearchBar';
+import ClientTable from '../components/ClientTable';
+import LoadingScreen from '../components/LoadingScreen';
+import { deleteClient, getClients } from '../utils/clientUtils';
 
 const ClientConsult = () => {
   const { state } = useGlobalContext();
+  const navigate = useNavigate();
 
-  const [interests, setInterests] = useState([]);
+  const [clients, setClients] = useState([]);
   const [error, setError] = useState(null);
-  const [clientes, setClientes] = useState([
-    { id: 1, nombre: 'Juan Pérez', identificacion: '12345678' },
-    { id: 2, nombre: 'Ana Gómez', identificacion: '87654321' },
-    { id: 3, nombre: 'Luis Martínez', identificacion: '11223344' },
-  ]);
+  const [loading, setLoading] = useState(true);
+
+  const [search, setSearch] = useState({nombre: '', identificacion: ''})
 
   useEffect(() => {
-    if (state.token) {
-      getInterests(state.token)
-        .then((data) => setInterests(data))
-        .catch((err) => setError('Failed to fetch interests'));
-    }
-  }, [state.token]);
+    const loadClients = async ({identificacion, nombre}) => {
+      try {
+        const clientData = await getClients(
+          { token: state.token, userId: state.userId },
+          { identificacion, nombre }
+        );
+        setClients(clientData);
+      } catch (err) {
+        console.error(err);
+        setError(err.message || 'Failed to fetch clients');
+      }
+    };
+    setLoading(true)
+    console.log(search);
+    loadClients(search);
+    setLoading(false)
+  }, [state.token, state.userId, search]);
 
-  const eliminarCliente = (id) => {
-    setClientes(clientes.filter((cliente) => cliente.id !== id));
+  const eliminarCliente = async ({ token }, id) => {
+    try {
+      if (token) {
+        await deleteClient({ token }, { idCliente: id });
+        setClients((prevClients) => prevClients.filter((client) => client.id !== id));
+        console.log(`Cliente con ID ${id} eliminado.`);
+      } else {
+        setError('Servicio no disponible');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Error al eliminar el cliente');
+    }
   };
 
   const editarCliente = (id) => {
     console.log(`Editar cliente con ID: ${id}`);
+    navigate('/client-maintenance', { state: { clientId: id } });
   };
 
-  return (
-    <div>
-      {state.token && (
-        <>
-          <h2>Lista de Intereses</h2>
-          {error ? (
-            <p style={{ color: 'red' }}>{error}</p>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>DESCRIPCION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {interests.map((interest) => (
-                  <tr key={interest.id}>
-                    <td>{interest.id}</td>
-                    <td>{interest.descripcion}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </>
-      )}
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
-      <h2>Lista de Clientes</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre Completo</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clientes.map((cliente) => (
-            <tr key={cliente.id}>
-              <td>{cliente.identificacion}</td>
-              <td>{cliente.nombre}</td>
-              <td>
-                <button onClick={() => editarCliente(cliente.id)}>Editar</button>
-                <button onClick={() => eliminarCliente(cliente.id)}>Borrar</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+  if (error) {
+    return <ErrorScreen error={error} />;
+  }
+
+  return (
+    <Box sx={{ p: 3}}>
+      <Header navigate={navigate} />
+      <SearchBar setSearch={setSearch}/>
+      <ClientTable
+        clients={clients}
+        onEdit={editarCliente}
+        onDelete={eliminarCliente}
+      />
+    </Box>
   );
 };
+
+const ErrorScreen = ({ error }) => (
+  <Box sx={{ p: 3 }}>
+    <Alert severity="error">{error}</Alert>
+  </Box>
+);
+
+const Header = ({ navigate }) => (
+  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+    <Typography variant="h4">Consulta de Clientes</Typography>
+    <Stack direction={"row"} spacing={1}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => navigate('/client-maintenance')}
+      >
+        Agregar
+      </Button>
+      <Button variant="outlined" color="secondary" onClick={() => navigate('/')}>Regresar</Button>
+    </Stack>
+  </Box>
+);
 
 export default ClientConsult;
