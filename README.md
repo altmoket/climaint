@@ -14,17 +14,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-#### Note: 
-If you are having problems compiling the project in your environment, this may be due to the dependencies of version 17 of react. To fix this, run the following command in your terminal
-##### Linux/Max:
-```bash
-export NODE_OPTIONS=--openssl-legacy-provider & npm start
-```
-##### Windows:
-```bash
-SET NODE_OPTIONS=--openssl-legacy-provider & npm start
-```
-
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
