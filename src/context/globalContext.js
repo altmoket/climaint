@@ -1,27 +1,28 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
-// Create the context
 const GlobalContext = createContext();
 
-// Reducer for state updates
 const globalReducer = (state, action) => {
   switch (action.type) {
     case 'SET_TOKEN':
-      localStorage.setItem('token', action.payload)
+      localStorage.setItem('token', action.payload);
       return { ...state, token: action.payload };
     case 'SET_USERID':
-      localStorage.setItem('userId', action.payload)
+      localStorage.setItem('userId', action.payload);
       return { ...state, userId: action.payload };
+    case 'SET_ISLOGGED':
+      localStorage.setItem('isLogged', action.payload);
+      return { ...state, isLogged: action.payload };
     default:
-      throw new Error(`Unknown action: ${action.type}`);
+      throw new Error(`Unknown action type: ${action.type}`);
   }
 };
 
-// Provider component
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, {
-    token: localStorage.getItem('token'),
-    userID: localStorage.getItem('userId')
+    token: localStorage.getItem('token') || null,
+    userId: localStorage.getItem('userId') || null,
+    isLogged: localStorage.getItem('isLogged') || false
   });
 
   return (
@@ -31,5 +32,10 @@ export const GlobalProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the GlobalContext
-export const useGlobalContext = () => useContext(GlobalContext);
+export const useGlobalContext = () => {
+  const context = useContext(GlobalContext);
+  if (!context) {
+    throw new Error('useGlobalContext must be used within a GlobalProvider');
+  }
+  return context;
+};
