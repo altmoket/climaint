@@ -1,105 +1,162 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import { TextField, Button, Grid, Typography, Box } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import { validateEmail, validatePassword, validateUsername } from '../utils/validations';
+import { registerUser } from '../utils/users';
+import Notification from '../components/Notification';
 
-const Validation = (value, error = null) => {
-  let errors = []
-  return {
-    getValue: () => value,
-    getErrors: () => errors,
-    isValid: () => errors.length === 0,
-    chain: (fn) => {
-      let result = fn(value)
-      let newValue = result.getValue()
-      if (errors || result.isValid()) {
-        return Validation(newValue)
+function Register() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [showNotification, setShowNotification] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+
+    if (name === 'email') {
+      const validatedEmail = validateEmail(value);
+      setErrors({
+        ...errors,
+        email: !validatedEmail.isValid() ? validatedEmail.getErrors().join(', ') : null
+      });
+    }
+
+    if (name === 'password') {
+      const validatedPassword = validatePassword(value);
+      setErrors({
+        ...errors,
+        password: !validatedPassword.isValid() ? validatedPassword.getErrors().join(', ') : null
+      });
+    }
+
+    if (name === 'username') {
+      const validatedUsername = validateUsername(value)
+      setErrors({
+        ...errors,
+        username: !validatedUsername.isValid() ? validatedUsername.getErrors().join(', ') : null
+      });
+    }
+  };
+
+  const isFormValid =
+    !errors.username &&
+    !errors.email &&
+    !errors.password &&
+    formData.username &&
+    formData.email &&
+    formData.password;
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    if (isFormValid) {
+      if (Object.keys(errors).length === 0) {
+        registerUser(formData)
+          .then((data) => {
+            navigate('/login', { state: { message: "Se ha registrado correctamente" } });
+          })
+          .catch((err) => console.error(err));
       }
-      return Validation(newValue, [...errors, error])
+    } else {
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 2000);
     }
-  }
-}
-
-const validateMinLength = (minLength) => (password) => {
-  return password.length > minLength
-    ? Validation(password)
-    : Validation(password, `Password length must be greater than ${minLength}`)
-}
-
-const validateMaxLength = (maxLength) => (password) => {
-  return password.length <= maxLength
-    ? Validation(password)
-    : Validation(password, `Password length must be less than or equal to ${maxLength}`)
-}
-
-const validateContainsNumber = (value) => {
-  const hasNumber = /\d/;
-  return hasNumber.test(value)
-    ? Validation(value)
-    : Validation(value, 'Password must contain at least one number')
-};
-
-const validateContainsUppercaseLetter = (value) => {
-  const hasLetter = /[A-Z]/; // Check for at least one letter
-  return hasLetter.test(value)
-    ? Validation(value)
-    : Validation(value, 'Password must contain at least one uppercase letter.')
-};
-
-const validateContainsLowercaseLetter = (value) => {
-  const hasLetter = /[a-z]/; // Check for at least one letter
-  return hasLetter.test(value)
-    ? Validation(value)
-    : Validation(value, 'Password must contain at least one lowercase letter.')
-};
-
-const validateEmail = (email) => {
-  // Regular expression for validating an Email
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return emailPattern.test(email)
-    ? Validation(email)
-    : Validation(email, 'Invalid email format.');
-};
-
-const validatePassword = (password) => {
-  const minLength = 8
-  const maxLength = 20
-
-  return Validation(password)
-    .chain(validateMinLength(minLength))
-    .chain(validateMaxLength(maxLength))
-    .chain(validateContainsNumber)
-    .chain(validateContainsUppercaseLetter)
-    .chain(validateContainsLowercaseLetter)
-}
-
-function Register({ registerUser }) {
-  const { register, handleSubmit, formState: { errors } } = useForm();
-
-  const onSubmit = ({ username, email, password }) => {
-    console.log("Register")
-    const validatedPassword = validatePassword(password)
-    const validatedEmail = validateEmail(email)
-    if (validatedEmail.isValid() && validatedPassword.isValid()) {
-      registerUser({ username, email, password })
-    }
-    console.log([...validatedEmail.getErrors(), ...validatedPassword.getErrors()])
   };
 
   return (
-    <>
-      <p className="title">Register</p>
-      <form className="App" onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" placeholder='Username' {...register("username", { required: true })} />
-        {errors.username && <span style={{ color: "red" }}> *Username* is mandatory </span>}
-
-        <input type="email" placeholder='Email' {...register("email", { required: true, pattern: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/ })} />
-        {errors.email && <span style={{ color: "red" }}> *Email* is mandatory </span>}
-
-        <input type="password" placeholder='Password' {...register("password", { required: true })} />
-        {errors.password && <span style={{ color: "red" }}> *Password* is mandatory </span>}
-
-        <input type="submit" style={{ backgroundColor: "#a1eafb" }} />
-      </form>
-    </>
+    <Box sx={{
+      height: '100vh',
+      maxWidth: 600,
+      padding: 3,
+      margin: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <Box sx={{
+        maxHeight: 500,
+        padding: { xs: '20px', md: '60px' },
+        borderRadius: '15px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+      }}>
+        <Typography variant="h4" component="h1" gutterBottom align="center">
+          Registrarse
+        </Typography>
+        <form onSubmit={onSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Nombre de Usuario *"
+                variant="outlined"
+                name="username"
+                value={formData.username}
+                error={!!errors.username}
+                onChange={handleChange}
+                helperText={errors.username}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Correo Electrónico *"
+                type="email" // Cambié de text a email
+                variant="outlined"
+                name="email"
+                value={formData.email}
+                error={!!errors.email}
+                onChange={handleChange}
+                helperText={errors.email}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="Contraseña *"
+                type="password"
+                variant="outlined"
+                name="password"
+                value={formData.password}
+                error={!!errors.password}
+                onChange={handleChange}
+                helperText={errors.password}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+              >
+                Registrarse
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+        <Box sx={{ marginTop: 2, textAlign: 'center' }}>
+          <Typography variant="body2">
+            ¿Ya tienes una cuenta?{' '}
+            <Link to="/login" style={{ textDecoration: 'none', color: '#1976d2', fontWeight: 'bold' }}>
+              Inicia sesión
+            </Link>
+          </Typography>
+        </Box>
+      </Box>
+      {showNotification && <Notification message="Completa los campos con error antes de registrarte" severity='error' />}
+    </Box>
   );
 }
 
