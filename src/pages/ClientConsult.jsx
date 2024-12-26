@@ -40,7 +40,6 @@ const ClientConsult = () => {
       }
     };
     setLoading(true)
-    console.log(search);
     loadClients(search);
     setLoading(false)
   }, [state.token, state.userId, search]);
@@ -61,7 +60,6 @@ const ClientConsult = () => {
   };
 
   const editarCliente = (id) => {
-    console.log(`Editar cliente con ID: ${id}`);
     navigate('/client-maintenance', { state: { clientId: id } });
   };
 
