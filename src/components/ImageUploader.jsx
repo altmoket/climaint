@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Box, FormLabel } from '@mui/material';
 import ClientImage from './ClientImage';
 
-const ImageUploader = ({ setImage , image}) => {
+const ImageUploader = ({ setImage, image }) => {
   const [base64Image, setBase64Image] = useState(image);
 
   const handleFileChange = (e) => {
@@ -10,16 +10,16 @@ const ImageUploader = ({ setImage , image}) => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const image = reader.result
+        const image = reader.result;
         setBase64Image(image);
-        setImage(image)
+        setImage(image);
       };
       reader.readAsDataURL(file);
     }
   };
 
   return (
-    <Box>
+    <Box display="flex" justifyContent="center" alignItems="center">
       <input
         accept="image/*"
         style={{ display: 'none' }}
@@ -27,9 +27,21 @@ const ImageUploader = ({ setImage , image}) => {
         type="file"
         onChange={handleFileChange}
       />
-
-      <FormLabel htmlFor='file-input'>
-        <Button>
+      <FormLabel htmlFor="file-input" style={{ display: 'inline-block' }}>
+        <Button
+          variant="contained"
+          component="span"
+          style={{
+            borderRadius: '50%',
+            padding: 0,
+            width: '60px',
+            height: '60px',
+            overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
           <ClientImage base64Image={base64Image} />
         </Button>
       </FormLabel>
