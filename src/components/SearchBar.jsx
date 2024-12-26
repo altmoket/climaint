@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 
 const SearchBar = ({ setSearch }) => {
   const [info, setInfo] = useState({ nombre: "", identificacion: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     const maxLengths = { nombre: 50, identificacion: 20 };
 
     if (value.length <= maxLengths[name]) {
@@ -17,11 +16,11 @@ const SearchBar = ({ setSearch }) => {
   };
 
   const handleSearchClick = () => {
-    setSearch({ nombre: info.nombre, identificacion: info.identificacion })
+    setSearch({ nombre: info.nombre, identificacion: info.identificacion });
   };
 
   return (
-    <Grid container spacing={2} pb={2}>
+    <Grid container spacing={2} pb={2} sx={{ zIndex: 0, position: 'relative' }}>
       <Grid item xs={12} sm={6} md={5}>
         <TextField
           label="Identificación"
