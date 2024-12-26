@@ -1,8 +1,5 @@
 import React from 'react';
 import {
-  Card,
-  CardHeader,
-  CardContent,
   Table,
   TableBody,
   TableCell,
@@ -10,46 +7,76 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
+  IconButton,
+  styled,
+  tableCellClasses,
+  Stack,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
 const ClientTable = ({ clients, onEdit, onDelete }) => {
   return (
-    <Paper >
-      <Table>
+    <TableContainer component={Paper}>
+      <Table size='small'>
         <TableHead>
-          <TableRow sx={{fontWeight: "bold"}}>
-            <TableCell sx={{width: "40%"}}>ID</TableCell>
-            <TableCell sx={{width: "40%"}}>Nombre Completo</TableCell>
-            <TableCell sx={{width: "20%"}}>Acciones</TableCell>
+          <TableRow>
+            {[
+              { label: 'IDENTIFICACIÓN', width: '35%' },
+              { label: 'NOMBRE COMPLETO', width: '45%' },
+              { label: 'ACCIONES', width: '20%', align: 'center' }
+            ].map(({ label, width, align = 'left' }) => (
+              <StyledTableCell key={label} sx={{ width }} align={align}>{label}</StyledTableCell>
+            ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {clients.length > 0 ? (
             clients.map((client) => (
-              <TableRow key={client.id}>
-                <TableCell>{client.identificacion}</TableCell>
-                <TableCell>{`${client.nombre} ${client.apellidos}`}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="text"
-                    color="primary"
-                    onClick={() => onEdit(client.id)}
-                    sx={{ mr: 1 }}
-                  >
-                    <EditIcon />
-                  </Button>
-                  <Button
-                    variant="text"
-                    color="error"
-                    onClick={() => onDelete(client.id)}
-                  >
-                    <DeleteIcon />
-                  </Button>
-                </TableCell>
-              </TableRow>
+              <StyledTableRow key={client.id}>
+                <StyledTableCell>{client.identificacion}</StyledTableCell>
+                <StyledTableCell>{`${client.nombre} ${client.apellidos}`}</StyledTableCell>
+                <StyledTableCell>
+                  <StyledTableCell>
+                    <Stack direction={'row'}>
+                      <IconButton aria-label="edit"
+                        variant="text"
+                        color="primary"
+                        onClick={() => onEdit(client.id)}>
+                        <EditIcon />
+                      </IconButton>
+
+                      <IconButton aria-label="delete"
+                        variant="text"
+                        color="error"
+                        onClick={() => onDelete(client.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </Stack>
+
+                  </StyledTableCell>
+                </StyledTableCell>
+              </StyledTableRow>
             ))
           ) : (
             <TableRow>
@@ -60,8 +87,7 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
           )}
         </TableBody>
       </Table>
-    </Paper>
-
+    </TableContainer>
   );
 };
 
