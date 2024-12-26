@@ -57,24 +57,22 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
                 <StyledTableCell>{client.identificacion}</StyledTableCell>
                 <StyledTableCell>{`${client.nombre} ${client.apellidos}`}</StyledTableCell>
                 <StyledTableCell>
-                  <StyledTableCell>
-                    <Stack direction={'row'}>
-                      <IconButton aria-label="edit"
-                        variant="text"
-                        color="primary"
-                        onClick={() => onEdit(client.id)}>
-                        <EditIcon />
-                      </IconButton>
+                  <Stack direction={'row'}>
+                    <IconButton aria-label="edit"
+                      variant="text"
+                      color="primary"
+                      onClick={() => onEdit(client.id)}>
+                      <EditIcon />
+                    </IconButton>
 
-                      <IconButton aria-label="delete"
-                        variant="text"
-                        color="error"
-                        onClick={() => onDelete(client.id)}>
-                        <DeleteIcon />
-                      </IconButton>
-                    </Stack>
+                    <IconButton aria-label="delete"
+                      variant="text"
+                      color="error"
+                      onClick={() => onDelete(client.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Stack>
 
-                  </StyledTableCell>
                 </StyledTableCell>
               </StyledTableRow>
             ))
