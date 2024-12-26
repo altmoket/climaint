@@ -1,23 +1,18 @@
 import React from 'react'
-import { Avatar, Badge, IconButton } from '@mui/material'
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { Box} from '@mui/material'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-const ClientImage = ({ base64Image, onChange, hidden}) => {
+const ClientImage = ({ base64Image }) => {
   return (
-    <Badge
-      overlap="circular"
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-      badgeContent={
-        <IconButton color="primary">
-          <CameraAltIcon />
-        </IconButton>
-      }
-    >
-      {base64Image ? <Avatar alt="Travis Howard" src={base64Image} sx={{width:100, height: 100}}/> : <AccountCircleIcon />}
-    </Badge>
-  )
-}
+    <Box>
+      {base64Image ? (
+        <img src={base64Image} alt="Client" style={{ width: '50px', height: 'auto' }} />
+      ) : (
+        <AccountCircleIcon sx={{ width: '50px', height: 'auto' }} />
+      )}
+    </Box>
+  );
+};
 
 export default ClientImage
 
