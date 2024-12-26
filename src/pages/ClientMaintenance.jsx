@@ -97,13 +97,11 @@ const ClientMaintenance = () => {
     }
 
     return (
-        <Card sx={{ maxWidth: 600, margin: "0 auto", padding: 3 }}>
-            <ClientForm
-                client={client}
-                interests={interests}
-                onSubmit={handleSubmit}
-                setClient={setClient} />
-        </Card>
+        <ClientForm
+            client={client}
+            interests={interests}
+            onSubmit={handleSubmit}
+            setClient={setClient} />
     );
 };
 

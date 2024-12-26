@@ -5,15 +5,14 @@ import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import Leftbar from '../components/Leftbar';
 
 const Layout = () => {
-  const [open, setOpen] = useState(false)
+  const [isOpenLeftBar, setIsOpenLeftBar] = useState(false)
   const theme = useTheme()
   const toggleLeftBar = () => {
-    setOpen(prev => !prev)
+    setIsOpenLeftBar(prev => !prev)
   }
 
   return (
     <Grid container direction="column">
-      {/* Barra de navegación superior */}
       <Grid item position="sticky" width="100%" zIndex={1001} top={0}>
         <ResponsiveAppBar openMenu={toggleLeftBar} />
       </Grid>
@@ -21,7 +20,7 @@ const Layout = () => {
       <Grid item sx={{ marginTop: 0 }}>
         <Grid item
           md={3}
-          display={{ xs: open ? 'flex' : 'none', md: 'flex' }}
+          display={{ xs: isOpenLeftBar ? 'flex' : 'none', sm: isOpenLeftBar ? 'flex' : 'none', md: 'flex' }}
           position={{ xs: "absolute", md: "fixed" }}
           top={{ xs: '10px', md: 0 }}
           sx={{
@@ -33,14 +32,16 @@ const Layout = () => {
           }}>
           <Leftbar toggleBar={toggleLeftBar} />
         </Grid>
+
         <Grid container>
-          <Grid item xs={12} sm={12} md={3} display={{ xs: 'none', sm: 'none', md: 'flex' }}>
+          <Grid item xs={12} md={3} display={{ xs: 'none', sm: 'none', md: 'flex' }}>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={9}>
+          <Grid item xs={12} md={9}>
             <Outlet />
           </Grid>
         </Grid>
+
       </Grid>
     </Grid>
   );
