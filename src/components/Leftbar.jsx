@@ -13,7 +13,7 @@ const links = [
 
 const Leftbar = () => {
   return (
-    <List sx={{ height: '100vh', boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)' }}>
+    <List sx={{ height: '100vh', width: '100%'}}>
       {links.map(({ label, to, icon }, index) => (
         <RouterLink
           to={to}
