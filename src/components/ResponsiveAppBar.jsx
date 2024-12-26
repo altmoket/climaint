@@ -7,17 +7,18 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { Stack } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({openMenu}) {
 
   const handleOpenNavMenu = (e) => {
     console.log("Icono presionado")
+    openMenu()
   } 
 
   return (
     <AppBar position="static">
       <Toolbar>
         {/* Menu icon */}
-        <Box sx={{ display: { xs: 'block', sm: 'block', md: 'flex' }, mr: '5px' }}>
+        <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' }, mr: '5px' }}>
           <IconButton onClick={handleOpenNavMenu} color="inherit">
             <MenuIcon fontSize="large" />
           </IconButton>

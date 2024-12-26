@@ -11,13 +11,14 @@ const links = [
   { label: 'Mantenimiento Cliente', to: "/client-maintenance", icon: <PersonAdd /> }
 ]
 
-const Leftbar = () => {
+const Leftbar = ({toggleBar}) => {
   return (
     <List sx={{ height: '100vh', width: '100%'}}>
       {links.map(({ label, to, icon }, index) => (
         <RouterLink
           to={to}
           key={label}
+          onClick={toggleBar}
           style={{ textDecoration: 'none', color: 'inherit' }}  // Remueve subrayado y asegura el color heredad
         >
           <ListItem disablePadding>
