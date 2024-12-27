@@ -58,7 +58,6 @@ function ResponsiveAppBar({ openMenu }) {
           </Box>
 
           <Stack direction={'row'} alignItems="center">
-            <Typography variant='h6' marginInlineEnd={'10px'}>{state.username}</Typography>
             <Button sx={{ bgcolor: theme.palette.primary.dark, borderRadius: '10px' }} endIcon={<LogoutIcon fontSize='small' />} variant="contained" color={"primary"} onClick={handleLogout}>
               Salir
             </Button>

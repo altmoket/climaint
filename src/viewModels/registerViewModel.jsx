@@ -12,6 +12,7 @@ const useRegisterViewModel = ({ navigate }) => {
   });
   const [errors, setErrors] = useState({});
   const { showNotification } = useNotification()
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,22 +57,27 @@ const useRegisterViewModel = ({ navigate }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isFormValid || Object.keys(errors).length !== 0) {
+    setLoading(true)
+
+    if (!isFormValid) {
       showNotification('Arregla los campos con error antes de continuar', 'error')
       return
     }
 
     const response = await registerUser(formData)
+
     if (!response.isValid()) {
-      showNotification(response.error || "Error desconocido al iniciar sesión", 'error')
+      showNotification(response.error || "Error desconocido al registrarse", 'error')
       return;
     }
 
     showNotification(response.message, 'success')
+    setLoading(false)
+    navigate('/login')
   };
 
   return {
-    onSubmit, formData, errors, handleChange
+    onSubmit, formData, errors, handleChange, loading
   }
 }
 

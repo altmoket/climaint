@@ -1,6 +1,7 @@
 import { TextField, Button, Grid, Typography, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import useRegisterViewModel from '../viewModels/registerViewModel';
+import LoadingScreen from '../components/LoadingScreen';
 
 function Register() {
 
@@ -10,10 +11,12 @@ function Register() {
     onSubmit,
     formData,
     errors,
-    handleChange
+    handleChange,
+    loading
   }
     = useRegisterViewModel({ navigate })
 
+  if (loading) return <LoadingScreen />
   return (
     <Box sx={{
       height: '100vh',
