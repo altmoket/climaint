@@ -13,7 +13,7 @@ import LoadingScreen from '../components/LoadingScreen';
 
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import useClientConsultViewModel from '../viewModels/clientViewModel';
+import useClientConsultViewModel from '../viewModels/clientConsultViewModel';
 import { useGlobalContext } from '../context/globalContext';
 
 const ClientConsult = () => {
