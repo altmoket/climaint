@@ -1,94 +1,26 @@
-import React, { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/globalContext';
 import { TextField, Button, Grid, Typography, Box, FormControlLabel, Checkbox, FormControl } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../utils/users';
 import Notification from '../components/Notification';
-import { validatePassword, validateUsername } from '../utils/validations';
 import LoadingScreen from '../components/LoadingScreen';
+import useLoginViewModel from '../viewModels/loginViewModel';
 
 function Login() {
   const { dispatch } = useGlobalContext();
-  const [userInfo, setUserInfo] = useState({ username: '', password: '', remember: false });
-  const [errors, setErrors] = useState({});
-  const [loginMessage, setLoginMessage] = useState('');
-  const [loginError, setLoginError] = useState('')
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: type === 'checkbox' ? checked : value
-    });
-
-    if (name === 'password') {
-      const validatedPassword = validatePassword(value);
-      setErrors({
-        ...errors,
-        password: !validatedPassword.isValid() ? validatedPassword.getErrors().join(', ') : null
-      });
-    }
-
-    if (name === 'username') {
-      const validatedUsername = validateUsername(value)
-      setErrors({
-        ...errors,
-        username: !validatedUsername.isValid() ? validatedUsername.getErrors().join(', ') : null
-      });
-    }
-  };
-
-  const isFormValid =
-    !errors.username &&
-    !errors.password &&
-    userInfo.username &&
-    userInfo.password;
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (isFormValid) {
-      localStorage.setItem("remember", userInfo.remember);
-
-      if (userInfo.remember) {
-        localStorage.setItem("username", userInfo.username);
-      } else {
-        localStorage.removeItem('username');
-      }
-      
-      loginUser({ username: userInfo.username, password: userInfo.password })
-        .then(({ data }) => {
-          const { token, userid } = data;
-          dispatch({ type: 'SET_TOKEN', payload: token });
-          dispatch({ type: 'SET_USERID', payload: userid });
-          dispatch({ type: 'SET_ISLOGGED', payload: true });
-
-          setLoginMessage("Se ha logueado satisfactoriamente")
-
-          setTimeout(() => {
-            navigate('/');
-          }, 2000);
-        })
-        .catch(err => {
-          console.error(err);
-          setLoginError('Nombre de usuario o contraseña incorrectos');
-        });
-    } else {
-      setLoginError("Completa los campos con error antes de registrarte")
-    }
-  };
-
-  useEffect(() => {
-    if (localStorage.getItem('remember')) {
-      const username = localStorage.getItem('username') || '';
-      setUserInfo(prev => ({ ...prev, username }));
-    }
-  }, []);
+  const {
+    userInfo,
+    handleChange,
+    onSubmit,
+    loginMessage,
+    loginError,
+    errors,
+  } = useLoginViewModel({ dispatch, navigate })
 
   if (loginMessage) {
-    return <><LoadingScreen /><Notification message={loginMessage}/></>
+    return <><LoadingScreen /><Notification message={loginMessage} /></>
   }
-  
 
   return (
     <Box sx={{
@@ -168,7 +100,7 @@ function Login() {
           </Typography>
         </Box>
         {loginError && <Notification message={loginError} severity='error' />}
-        
+
       </Box>
     </Box>
   );
