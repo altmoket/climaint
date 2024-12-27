@@ -21,25 +21,79 @@ import { useNavigate } from "react-router-dom";
 import ImageUploader from "./ImageUploader";
 import { useState } from "react";
 
+// Componente FormField para simplificar la creación de campos
+const FormField = ({ label, name, type, value, onChange, error, helperText, multiline, rows }) => (
+  <Grid item xs={12} sm={6} md={4} key={name}>
+    <TextField
+      label={label}
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+      fullWidth
+      multiline={multiline}
+      rows={rows}
+      InputLabelProps={{ shrink: true }}
+      required
+      error={!!error}
+      helperText={helperText || error}
+    />
+  </Grid>
+);
+
 const ClientForm = ({ client, interests, onSubmit, setClient }) => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const theme = useTheme()
+  const theme = useTheme();
   const isXsScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const validateForm = () => {
     const newErrors = {};
-    if (client.nombre && client.nombre.length > 50) newErrors.nombre = "El nombre no puede superar los 50 caracteres";
-    if (client.apellidos && client.apellidos.length > 100) newErrors.apellidos = "Los apellidos no pueden superar los 100 caracteres";
-    if (client.identificacion && client.identificacion.length > 20) newErrors.identificacion = "La identificación no puede superar los 20 caracteres";
-    if (client.celular && client.celular.length > 20) newErrors.celular = "El teléfono celular no puede superar los 20 caracteres";
-    if (client.otroTelefono && client.otroTelefono.length > 20) newErrors.otroTelefono = "El teléfono otro no puede superar los 20 caracteres";
-    if (client.direccion && client.direccion.length > 200) newErrors.direccion = "La dirección no puede superar los 200 caracteres";
-    if (client.sexo && client.sexo.length > 1) newErrors.sexo = "Sexo debe ser 'M' o 'F'";
-    if (client.resennaPersonal && client.resennaPersonal.length > 200) newErrors.resennaPersonal = "La reseña personal no puede superar los 200 caracteres";
+    const validations = [
+      { field: "nombre", maxLength: 50 },
+      { field: "apellidos", maxLength: 100 },
+      { field: "identificacion", maxLength: 20 },
+      { field: "celular", maxLength: 20 },
+      { field: "otroTelefono", maxLength: 20 },
+      { field: "direccion", maxLength: 200 },
+      { field: "sexo", validValues: ["M", "F"] },
+      { field: "resennaPersonal", maxLength: 200 },
+      { field: "fNacimiento" },
+      { field: "fAfiliacion" },
+      { field: "interesFK"}
+
+    ];
+
+    validations.forEach(({ field, maxLength, validValues }) => {
+      console.log(field)
+      if (!client[field]) {
+        newErrors[field] = `${labelFor(field)} es requerido(a)`;
+      } else if (maxLength && client[field]?.length > maxLength) {
+        newErrors[field] = `${labelFor(field)} no puede superar los ${maxLength} caracteres`;
+      } else if (validValues && !validValues.includes(client[field])) {
+        newErrors[field] = `${labelFor(field)} debe ser 'M' o 'F'`;
+      }
+    });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const labelFor = (field) => {
+    const labels = {
+      nombre: "El nombre",
+      apellidos: "Los apellidos",
+      identificacion: "La identificación",
+      celular: "El teléfono celular",
+      otroTelefono: "El teléfono adicional",
+      direccion: "La dirección",
+      sexo: "Sexo",
+      resennaPersonal: "La reseña personal",
+      fNacimiento: "La fecha de nacimiento",
+      fAfiliacion: "La fecha de afiliación",
+      interesFK: "El interés"
+    };
+    return labels[field] || field;
   };
 
   const handleChange = (e) => {
@@ -55,7 +109,7 @@ const ClientForm = ({ client, interests, onSubmit, setClient }) => {
   };
 
   return (
-    <Card sx={{ padding: 2, margin: "1rem", boxShadow: 3}}>
+    <Card sx={{ padding: 2, margin: "1rem", boxShadow: 3 }}>
       <CardHeader
         title="Mantenimiento de Clientes"
         avatar={
@@ -103,23 +157,18 @@ const ClientForm = ({ client, interests, onSubmit, setClient }) => {
               { label: "Apellidos", name: "apellidos", type: "text", error: errors.apellidos },
               { label: "Teléfono Celular", name: "celular", type: "tel", error: errors.celular },
               { label: "Teléfono Otro", name: "otroTelefono", type: "tel", error: errors.otroTelefono },
-              { label: "Fecha de Nacimiento", name: "fNacimiento", type: "date", error: null },
-              { label: "Fecha de Afiliación", name: "fAfiliacion", type: "date", error: null },
+              { label: "Fecha de Nacimiento", name: "fNacimiento", type: "date", error: errors.fNacimiento },
+              { label: "Fecha de Afiliación", name: "fAfiliacion", type: "date", error: errors.fAfiliacion },
             ].map(({ label, name, type, error }) => (
-              <Grid item xs={12} sm={6} md={4} key={name}>
-                <TextField
-                  label={label}
-                  name={name}
-                  type={type}
-                  value={client[name]}
-                  onChange={handleChange}
-                  fullWidth
-                  InputLabelProps={{ shrink: true }}
-                  required={name !== "otroTelefono"}
-                  error={!!error}
-                  helperText={error}
-                />
-              </Grid>
+              <FormField
+                key={name}
+                label={label}
+                name={name}
+                type={type}
+                value={client[name]}
+                onChange={handleChange}
+                error={error}
+              />
             ))}
 
             <Grid item xs={12} sm={6} md={4}>
@@ -146,6 +195,7 @@ const ClientForm = ({ client, interests, onSubmit, setClient }) => {
                   name="interesFK"
                   value={client.interesFK}
                   onChange={handleChange}
+                  required
                 >
                   <MenuItem value="">Seleccione...</MenuItem>
                   {interests.map(({ id, descripcion }) => (
@@ -162,22 +212,18 @@ const ClientForm = ({ client, interests, onSubmit, setClient }) => {
               { label: "Dirección", name: "direccion", type: "text", multiline: true, rows: 2, error: errors.direccion },
               { label: "Reseña Personal", name: "resennaPersonal", type: "text", multiline: true, rows: 2, error: errors.resennaPersonal },
             ].map(({ label, name, type, multiline, rows, error }) => (
-              <Grid item xs={12} key={name}>
-                <TextField
-                  label={label}
-                  name={name}
-                  type={type}
-                  value={client[name]}
-                  onChange={handleChange}
-                  fullWidth
-                  multiline={multiline || false}
-                  rows={rows || 1}
-                  InputLabelProps={{ shrink: true }}
-                  required
-                  error={!!error}
-                  helperText={error}
-                />
-              </Grid>
+              <FormField
+                key={name}
+                label={label}
+                name={name}
+                type={type}
+                value={client[name]}
+                onChange={handleChange}
+                error={error}
+                multiline={multiline}
+                rows={rows}
+
+              />
             ))}
           </Grid>
         </form>
