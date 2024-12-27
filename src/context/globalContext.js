@@ -13,6 +13,9 @@ const globalReducer = (state, action) => {
     case 'SET_ISLOGGED':
       localStorage.setItem('isLogged', action.payload);
       return { ...state, isLogged: action.payload };
+    case 'SET_USERNAME':
+      localStorage.setItem('username', action.payload);
+      return { ...state, username: action.payload };
     default:
       throw new Error(`Unknown action type: ${action.type}`);
   }
@@ -22,7 +25,8 @@ export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, {
     token: localStorage.getItem('token') || null,
     userId: localStorage.getItem('userId') || null,
-    isLogged: localStorage.getItem('isLogged') || false
+    isLogged: localStorage.getItem('isLogged') || false,
+    username: localStorage.getItem('username') || null
   });
 
   return (
