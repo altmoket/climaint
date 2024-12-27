@@ -5,6 +5,8 @@ import {
   Typography,
   Stack,
   Divider,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import SearchBar from '../components/SearchBar';
 import ClientTable from '../components/ClientTable';
@@ -19,7 +21,7 @@ const ClientConsult = () => {
   const { state } = useGlobalContext()
   const navigate = useNavigate();
 
-  const { loading,setSearch, clients, eliminarCliente } = useClientConsultViewModel({ token: state.token, userId: state.userId })
+  const { loading, setSearch, clients, eliminarCliente } = useClientConsultViewModel({ token: state.token, userId: state.userId })
 
   if (loading) {
     return <LoadingScreen />;
@@ -46,14 +48,26 @@ const ClientConsult = () => {
   );
 };
 
-const Header = ({ navigate }) => (
-  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'center' }}>
+const Header = ({ navigate }) => {
+  const theme = useTheme()
+  const isXsScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'center' }}>
     <Typography variant="h4">Consulta de Clientes</Typography>
     <Stack direction={"row"} spacing={1}>
-      <Button startIcon={<PersonAddIcon />} variant="contained" color="primary" onClick={() => navigate('/client-maintenance')}>Agregar</Button>
-      <Button startIcon={<ArrowBackIcon />} variant="outlined" color="error" onClick={() => navigate('/')}>Regresar</Button>
+      <Box
+        textAlign="right"
+        padding={2}
+        display="flex"
+        flexDirection={isXsScreen ? "column" : "row"}
+        gap={1}
+      >
+        <Button startIcon={<PersonAddIcon />} variant="contained" color="primary" onClick={() => navigate('/client-maintenance')}>Agregar</Button>
+        <Button startIcon={<ArrowBackIcon />} variant="outlined" color="error" onClick={() => navigate('/')}>Regresar</Button>
+      </Box>
     </Stack>
   </Box>
-);
+  )
+};
 
 export default ClientConsult;
