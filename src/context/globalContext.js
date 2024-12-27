@@ -16,9 +16,9 @@ const globalReducer = (state, action) => {
     case 'SET_USERNAME':
       localStorage.setItem('username', action.payload || '');
       return { ...state, username: action.payload };
-    case 'CLEAR_USERNAME':
-      localStorage.setItem('username', '');
-      return { ...state, username: '' };
+    case 'SET_REMEMBER':
+      localStorage.setItem('remember', action.payload);
+      return { ...state, remember: action.payload };
     default:
       throw new Error(`Unknown action type: ${action.type}`);
   }
@@ -29,7 +29,8 @@ export const GlobalProvider = ({ children }) => {
     token: localStorage.getItem('token') | null,
     userId: localStorage.getItem('userId') | null,
     isLogged: localStorage.getItem('isLogged') === 'true',
-    username: localStorage.getItem('username')
+    username: localStorage.getItem('username') | null,
+    remember: localStorage.getItem('remember') | false
   });
 
   return (

@@ -5,7 +5,7 @@ import useLoginViewModel from '../viewModels/loginViewModel';
 import LoadingScreen from '../components/LoadingScreen';
 
 function Login() {
-  const { dispatch } = useGlobalContext();
+  const { state, dispatch } = useGlobalContext();
   const navigate = useNavigate();
 
   const {
@@ -14,7 +14,7 @@ function Login() {
     onSubmit,
     errors,
     loading
-  } = useLoginViewModel({ dispatch, navigate })
+  } = useLoginViewModel({ state, dispatch, navigate })
 
   if (loading) return <LoadingScreen/>
   

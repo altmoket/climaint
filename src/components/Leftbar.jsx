@@ -20,7 +20,6 @@ const Leftbar = ({ toggleBar }) => {
       <Box padding={1}
         display={'flex'}
         flexDirection={'column'}
-        // justifyContent={'center'}
         alignItems={'center'}
         alignSelf={'center'}
       >

@@ -1,19 +1,15 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { validatePassword, validateUsername } from "../utils/validations";
 import { loginUser } from "../utils/users";
 import { useNotification } from "../hooks/NotificationContext";
 
-const userInitialState = () => {
-  const remember = localStorage.getItem('remember') === 'true'
-  return {
-    username: remember ? localStorage.getItem('username') : '',
-    password: '',
-    remember
-  }
-}
 
-const useLoginViewModel = ({ dispatch, navigate }) => {
-  const [userInfo, setUserInfo] = useState(userInitialState);
+const useLoginViewModel = ({ state, dispatch, navigate }) => {
+  const [userInfo, setUserInfo] = useState({
+    username: state.remember ? state.username : '',
+    password: '',
+    remember: state.remember
+  });
   const [errors, setErrors] = useState({ username: '', password: '' });
   const { showNotification } = useNotification()
   const [loading, setLoading] = useState(false)
@@ -56,26 +52,17 @@ const useLoginViewModel = ({ dispatch, navigate }) => {
       showNotification(response.error || "Error desconocido al iniciar sesión", 'error')
       return;
     }
+
     const { token, userid, expiration, username, message } = response;
     dispatch({ type: "SET_TOKEN", payload: token });
     dispatch({ type: "SET_USERID", payload: userid });
     dispatch({ type: "SET_ISLOGGED", payload: true });
-    if (userInfo.remember) {
-      dispatch({ type: "SET_USERNAME", payload: username });
-    } else {
-      dispatch({ type: "CLEAR_USERNAME" });
-    }
+    dispatch({ type: "SET_USERNAME", payload: username });
+    dispatch({ type: "SET_REMEMBER", payload: userInfo.remember})
 
     showNotification(message, 'success')
     navigate("/")
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("remember")) {
-      const username = localStorage.getItem("username") || '';
-      setUserInfo((prev) => ({ ...prev, username }));
-    }
-  }, []);
 
   return {
     userInfo,
