@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { useGlobalContext } from '../context/globalContext';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -12,56 +10,17 @@ import {
 import SearchBar from '../components/SearchBar';
 import ClientTable from '../components/ClientTable';
 import LoadingScreen from '../components/LoadingScreen';
-import { deleteClient, getClients } from '../utils/clientUtils';
+
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import useClientViewModel from '../viewModels/clientViewModel';
+import { useGlobalContext } from '../context/globalContext';
 
 const ClientConsult = () => {
-  const { state } = useGlobalContext();
+  const { state } = useGlobalContext()
   const navigate = useNavigate();
 
-  const [clients, setClients] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const [search, setSearch] = useState({ nombre: '', identificacion: '' })
-
-  useEffect(() => {
-    const loadClients = async ({ identificacion, nombre }) => {
-      try {
-        const clientData = await getClients(
-          { token: state.token, userId: state.userId },
-          { identificacion, nombre }
-        );
-        setClients(clientData);
-      } catch (err) {
-        console.error(err);
-        setError(err.message || 'Failed to fetch clients');
-      }
-    };
-    setLoading(true)
-    loadClients(search);
-    setLoading(false)
-  }, [state.token, state.userId, search]);
-
-  const eliminarCliente = async ({ token }, id) => {
-    try {
-      if (token) {
-        await deleteClient({ token }, { idCliente: id });
-        setClients((prevClients) => prevClients.filter((client) => client.id !== id));
-        console.log(`Cliente con ID ${id} eliminado.`);
-      } else {
-        setError('Servicio no disponible');
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Error al eliminar el cliente');
-    }
-  };
-
-  const editarCliente = (id) => {
-    navigate('/client-maintenance', { state: { clientId: id } });
-  };
+  const { loading, error, setSearch, clients, eliminarCliente } = useClientViewModel({ token: state.token, userId: state.userId })
 
   if (loading) {
     return <LoadingScreen />;
@@ -70,6 +29,11 @@ const ClientConsult = () => {
   if (error) {
     return <ErrorScreen error={error} />;
   }
+
+  // TODO: Handle errors and show notifications
+  const editarCliente = (id) => {
+    navigate('/client-maintenance', { state: { clientId: id } });
+  };
 
   return (
     <Box sx={{ p: 3 }}>
@@ -99,7 +63,7 @@ const Header = ({ navigate }) => (
     <Typography variant="h4">Consulta de Clientes</Typography>
     <Stack direction={"row"} spacing={1}>
       <Button startIcon={<PersonAddIcon />} variant="contained" color="primary" onClick={() => navigate('/client-maintenance')}>Agregar</Button>
-      <Button startIcon={<ArrowBackIcon />} variant="outlined" color="secondary" onClick={() => navigate('/')}>Regresar</Button>
+      <Button startIcon={<ArrowBackIcon />} variant="outlined" color="error" onClick={() => navigate('/')}>Regresar</Button>
     </Stack>
   </Box>
 );
