@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { deleteClient, getClients } from '../utils/clientUtils';
 
-const useClientViewModel = ({token, userId}) => {
+const useClientConsultViewModel = ({token, userId}) => {
   console.log("Token:", token, "User ID", userId)
   const [clients, setClients] = useState([]);
   const [error, setError] = useState(null);
@@ -52,4 +52,4 @@ const useClientViewModel = ({token, userId}) => {
   };
 }
 
-export default useClientViewModel
+export default useClientConsultViewModel

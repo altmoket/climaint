@@ -13,14 +13,14 @@ import LoadingScreen from '../components/LoadingScreen';
 
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import useClientViewModel from '../viewModels/clientViewModel';
+import useClientConsultViewModel from '../viewModels/clientViewModel';
 import { useGlobalContext } from '../context/globalContext';
 
 const ClientConsult = () => {
   const { state } = useGlobalContext()
   const navigate = useNavigate();
 
-  const { loading, error, setSearch, clients, eliminarCliente } = useClientViewModel({ token: state.token, userId: state.userId })
+  const { loading, error, setSearch, clients, eliminarCliente } = useClientConsultViewModel({ token: state.token, userId: state.userId })
 
   if (loading) {
     return <LoadingScreen />;
