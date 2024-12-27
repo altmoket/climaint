@@ -43,7 +43,7 @@ export const loginUser = async ({ username, password }) => {
     const response = await axiosInstance.post('/api/Authenticate/login', { username, password });
 
     if (response.status === 200) {
-      console.info("Login exitoso:", response.data);
+      // console.info("Login exitoso:", response.data);
       return createLoginResponse({ ...response.data, message: 'Se ha logueado correctamente' });
     } else {
       console.error("Error en el login:", { status: response.status, message: response.statusText });

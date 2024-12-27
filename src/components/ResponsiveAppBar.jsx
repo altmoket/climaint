@@ -13,7 +13,7 @@ import { useNotification } from '../hooks/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 
 function ResponsiveAppBar({ openMenu }) {
-  const { state, dispatch } = useGlobalContext();
+  const { dispatch } = useGlobalContext();
   const { showNotification } = useNotification()
   const navigate = useNavigate();
   const theme = useTheme()

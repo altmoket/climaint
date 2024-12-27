@@ -17,7 +17,7 @@ const globalReducer = (state, action) => {
       localStorage.setItem('username', action.payload || '');
       return { ...state, username: action.payload };
     case 'SET_REMEMBER':
-      localStorage.setItem('remember', action.payload);
+      localStorage.setItem('remember', action.payload ? 'true' : 'false');
       return { ...state, remember: action.payload };
     default:
       throw new Error(`Unknown action type: ${action.type}`);
@@ -26,11 +26,11 @@ const globalReducer = (state, action) => {
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, {
-    token: localStorage.getItem('token') | null,
-    userId: localStorage.getItem('userId') | null,
+    token: localStorage.getItem('token') || null,
+    userId: localStorage.getItem('userId') || null,
     isLogged: localStorage.getItem('isLogged') === 'true',
-    username: localStorage.getItem('username') | null,
-    remember: localStorage.getItem('remember') | false
+    username: localStorage.getItem('username') || null,
+    remember: localStorage.getItem('remember') === 'true'
   });
 
   return (
