@@ -1,7 +1,6 @@
 import { useGlobalContext } from '../context/globalContext';
 import { TextField, Button, Grid, Typography, Box, FormControlLabel, Checkbox, FormControl } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
-import Notification from '../components/Notification';
 import LoadingScreen from '../components/LoadingScreen';
 import useLoginViewModel from '../viewModels/loginViewModel';
 
@@ -19,7 +18,7 @@ function Login() {
   } = useLoginViewModel({ dispatch, navigate })
 
   if (loginMessage) {
-    return <><LoadingScreen /><Notification message={loginMessage} /></>
+    return <LoadingScreen />
   }
 
   return (
@@ -99,8 +98,6 @@ function Login() {
             </Link>
           </Typography>
         </Box>
-        {loginError && <Notification message={loginError} severity='error' />}
-
       </Box>
     </Box>
   );

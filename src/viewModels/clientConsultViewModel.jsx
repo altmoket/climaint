@@ -1,55 +1,63 @@
 import { useState, useEffect } from "react";
-import { deleteClient, getClients } from '../utils/clientUtils';
+import { deleteClient, getClients } from "../utils/clientUtils";
+import { useNotification } from "../hooks/NotificationContext";
 
-const useClientConsultViewModel = ({token, userId}) => {
-  console.log("Token:", token, "User ID", userId)
+const useClientConsultViewModel = ({ token, userId }) => {
   const [clients, setClients] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState({ nombre: '', identificacion: '' })
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState({ nombre: "", identificacion: "" });
+  const { showNotification } = useNotification();
 
-  useEffect(() => {
-    const loadClients = async ({ identificacion, nombre }) => {
-      try {
-        const clientData = await getClients(
-          { token, userId: userId },
-          { identificacion, nombre }
-        );
-        setClients(clientData);
-      } catch (err) {
-        console.error(err);
-        setError(err.message || 'Failed to fetch clients');
-      }
-    };
-    setLoading(true)
-    loadClients(search);
+  const loadClients = async (searchCriteria) => {
+    setLoading(true);
+    getClients({ token, userId }, searchCriteria)
+      .then(({ success, data, message, error }) => {
+        if (success) {
+          setClients(data);
+          showNotification(message, "success");
+        } else {
+          console.error("Error fetching clients:", error);
+          showNotification("Error al cargar los clientes", "error");
+        }
+      })
     setLoading(false)
-  }, [token, userId, search]);
+  };
 
-  // TODO: Handle errors and show notifications
-  const eliminarCliente = async ({ token }, id) => {
-    try {
-      if (token) {
-        await deleteClient({ token }, { idCliente: id });
-        setClients((prevClients) => prevClients.filter((client) => client.id !== id));
-        console.log(`Cliente con ID ${id} eliminado.`);
-      } else {
-        setError('Servicio no disponible');
-      }
-    } catch (err) {
-      console.error(err);
-      setError('Error al eliminar el cliente');
+  const eliminarCliente = async (id) => {
+    setLoading(true);
+    if (!id) {
+      showNotification("ID del cliente requerido para eliminar")
+    } else {
+      deleteClient({ token }, { idCliente: id })
+        .then(({ success, error, message}) => {
+          if (success) {
+            setClients((prevClients) =>
+              prevClients.filter((client) => client.id !== id)
+            );
+            // loadClients()
+            showNotification("Cliente Eliminado satisfactoriamente")
+          } else {
+            console.error("Error deleting client:", error);
+            showNotification("Error al eliminar el cliente", "error");
+          }
+          setLoading(false)
+        })
     }
   };
+
+  useEffect(() => {
+    if (token && userId) {
+      loadClients(search);
+    }
+  }, [token, userId, search]);
 
   return {
     clients,
     loading,
-    error,
     search,
     setSearch,
     eliminarCliente,
   };
-}
+};
 
-export default useClientConsultViewModel
+export default useClientConsultViewModel;

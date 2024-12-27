@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -11,9 +11,30 @@ import {
   styled,
   tableCellClasses,
   Stack,
+  Button
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+
+const DeleteConfirmationModal = ({ onDelete, open, onClose }) => {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>¿Estás seguro de que deseas eliminar a este cliente?</DialogTitle>
+      <DialogContent>
+        <p>Esta acción no se puede deshacer.</p>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} variant="contained" color="primary">
+          Cancelar
+        </Button>
+        <Button onClick={onDelete} variant="outlined" color="error">
+          Eliminar
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -36,8 +57,27 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const ClientTable = ({ clients, onEdit, onDelete }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [clientId, setClientId] = useState(null);
+
+  const handleOpenModal = (clientId) => {
+    setClientId(clientId)
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleDeleteModal = () => {
+    console.log("Elemento eliminado");
+    onDelete(clientId)
+    handleCloseModal();
+  };
+
   return (
     <TableContainer component={Paper}>
+      <DeleteConfirmationModal  onDelete={handleDeleteModal} open={openModal} onClose={handleCloseModal}></DeleteConfirmationModal>
       <Table size='small'>
         <TableHead>
           <TableRow>
@@ -68,7 +108,7 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
                     <IconButton aria-label="delete"
                       variant="text"
                       color="error"
-                      onClick={() => onDelete(client.id)}>
+                      onClick={() => handleOpenModal(client.id)}>
                       <DeleteIcon />
                     </IconButton>
                   </Stack>

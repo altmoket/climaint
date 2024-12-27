@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Typography,
-  Alert,
   Stack,
   Divider,
 } from '@mui/material';
@@ -20,14 +19,10 @@ const ClientConsult = () => {
   const { state } = useGlobalContext()
   const navigate = useNavigate();
 
-  const { loading, error, setSearch, clients, eliminarCliente } = useClientConsultViewModel({ token: state.token, userId: state.userId })
+  const { loading,setSearch, clients, eliminarCliente } = useClientConsultViewModel({ token: state.token, userId: state.userId })
 
   if (loading) {
     return <LoadingScreen />;
-  }
-
-  if (error) {
-    return <ErrorScreen error={error} />;
   }
 
   // TODO: Handle errors and show notifications
@@ -51,12 +46,6 @@ const ClientConsult = () => {
     </Box>
   );
 };
-
-const ErrorScreen = ({ error }) => (
-  <Box sx={{ p: 3 }}>
-    <Alert severity="error">{error}</Alert>
-  </Box>
-);
 
 const Header = ({ navigate }) => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'center' }}>

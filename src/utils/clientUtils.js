@@ -1,101 +1,148 @@
 import axiosInstance from "./axiosInstance";
 
-// Fetch interests with proper error handling
+const getAuthHeaders = (token) => ({ Authorization: `Bearer ${token}` });
+
+const createResponse = ({ success = true, data = null, error = null, message = '' }) => {
+  return {
+    success, data, error, message
+  };
+};
+
 export const getInterests = async (token) => {
   try {
     const response = await axiosInstance.get("api/Intereses/Listado", {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: getAuthHeaders(token),
     });
-    return response.data;
+    return createResponse({
+      success: true,
+      data: response.data,
+      message: 'Intereses extraídos satisfactoriamente',
+    });
   } catch (error) {
     console.error("Error fetching interests:", error);
-    return []; // Return an empty array on error
+    return createResponse({
+      success: false,
+      error: 'Error al cargar los intereses',
+    });
   }
 };
 
-// Format date string to "YYYY-MM-DD"
 export const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toISOString().split("T")[0];
 };
 
-// Fetch clients with proper return handling and error handling
 export const getClients = async ({ token, userId }, { identificacion = '', nombre = '' }) => {
-  const headers = { Authorization: `Bearer ${token}` };
   try {
     const response = await axiosInstance.post(
       "api/Cliente/Listado",
       { identificacion, nombre, usuarioId: userId },
-      { headers }
+      { headers: getAuthHeaders(token) }
     );
-    console.log(response.data)
-    return response.data;
+    return createResponse({
+      success: true,
+      data: response.data,
+      message: 'Clientes listados satisfactoriamente',
+    });
   } catch (error) {
     console.error("Error fetching clients:", error);
-    throw error; // Propagate the error after logging
+    return createResponse({
+      success: false,
+      error: 'Error al listar los clientes',
+    });
   }
 };
 
-// Create a new client with proper error handling
 export const createClient = async ({ token, userId }, clientData) => {
-  const headers = { Authorization: `Bearer ${token}` };
   try {
     const response = await axiosInstance.post(
       "api/Cliente/Crear",
       { ...clientData, usuarioId: userId },
-      { headers }
+      { headers: getAuthHeaders(token) }
     );
-    return response.data;
+    return createResponse({
+      success: true,
+      data: response.data,
+      message: 'Cliente creado satisfactoriamente',
+    });
   } catch (error) {
-    console.log("Error creating client:", error);
-    throw error; // Propagate the error after logging
+    console.error("Error creating client:", error);
+    return createResponse({
+      success: false,
+      error: 'Error al crear el cliente',
+    });
   }
 };
 
-// Update client data with proper error handling
 export const updateClient = async ({ token, userId }, clientData) => {
-  const headers = { Authorization: `Bearer ${token}` };
   try {
     const response = await axiosInstance.post(
       "api/Cliente/Actualizar",
       { ...clientData, usuarioId: userId },
-      { headers }
+      { headers: getAuthHeaders(token) }
     );
-    return response.data;
+    return createResponse({
+      success: true,
+      data: response.data,
+      message: 'Cliente actualizado satisfactoriamente',
+    });
   } catch (error) {
-    console.log("Error updating client:", error);
-    throw error; // Propagate the error after logging
+    console.error("Error updating client:", error);
+    return createResponse({
+      success: false,
+      error: 'Error al actualizar el cliente',
+    });
   }
 };
 
-// Fetch a single client by ID with proper error handling
 export const getClient = async ({ token }, { idCliente }) => {
-  const headers = { Authorization: `Bearer ${token}` };
-  if (!idCliente) throw new Error("Client ID is required.");
+  if (!idCliente) {
+    return createResponse({
+      success: false,
+      error: 'Se requiere el ID del cliente',
+    });
+  }
   try {
     const response = await axiosInstance.get(
       `api/Cliente/Obtener/${idCliente}`,
-      { headers }
+      { headers: getAuthHeaders(token) }
     );
-    return response.data;
+    return createResponse({
+      success: true,
+      data: response.data,
+      message: 'Cliente obtenido satisfactoriamente',
+    });
   } catch (error) {
-    console.log("Error fetching client:", error);
-    throw error; // Propagate the error after logging
+    console.error("Error fetching client:", error);
+    return createResponse({
+      success: false,
+      error: 'Error al obtener el cliente',
+    });
   }
 };
 
-// Delete a client with proper error handling
 export const deleteClient = async ({ token }, { idCliente }) => {
-  const headers = { Authorization: `Bearer ${token}` };
-  if (!idCliente) throw new Error("Client ID is required.");
+  if (!idCliente) {
+    return createResponse({
+      success: false,
+      error: 'Se requiere el ID del cliente',
+    });
+  }
   try {
     const response = await axiosInstance.delete(
       `api/Cliente/Eliminar/${idCliente}`,
-      { headers }
+      { headers: getAuthHeaders(token) }
     );
-    return response;
+    return createResponse({
+      success: true,
+      data: response.data,
+      message: 'Cliente eliminado satisfactoriamente',
+    });
   } catch (error) {
-    console.log("Error deleting client:", error);
-    throw error; // Propagate the error after logging
+    console.error("Error deleting client:", error);
+    return createResponse({
+      success: false,
+      error: 'Error al eliminar el cliente',
+    });
   }
 };

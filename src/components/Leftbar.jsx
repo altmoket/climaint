@@ -7,10 +7,7 @@ import { useGlobalContext } from "../context/globalContext";
 
 const links = [
   { label: 'Inicio', to: '/', icon: <Home /> },
-  // { label: 'Login', to: '/login', icon: <Login /> },
-  // { label: 'Register', to: '/register', icon: <Mail /> },
   { label: 'Consulta Cliente', to: "/client-consult", icon: <People /> },
-  // { label: 'Mantenimiento Cliente', to: "/client-maintenance", icon: <PersonAdd /> }
 ]
 
 const Leftbar = ({ toggleBar }) => {

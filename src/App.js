@@ -10,26 +10,28 @@ import Error from './pages/Error';
 import { GlobalProvider } from './context/globalContext';
 import { ThemeProvider } from '@mui/material';
 import theme from './utils/theme';
+import { NotificationProvider } from './hooks/NotificationContext';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-    <GlobalProvider>
-      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <Routes>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="client-consult" element={<ClientConsult />} />
-            <Route path="client-maintenance" element={<ClientMaintenance />} />
-            <Route path="*" element={<Error />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </GlobalProvider>
+      <NotificationProvider>
+        <GlobalProvider>
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <Routes>
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="client-consult" element={<ClientConsult />} />
+                <Route path="client-maintenance" element={<ClientMaintenance />} />
+                <Route path="*" element={<Error />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </GlobalProvider>
+      </NotificationProvider>
     </ThemeProvider>
-      
   );
 }
 

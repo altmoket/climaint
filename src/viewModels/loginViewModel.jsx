@@ -1,83 +1,76 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { validatePassword, validateUsername } from "../utils/validations";
 import { loginUser } from "../utils/users";
-
+import { useNotification } from "../hooks/NotificationContext";
 
 const useLoginViewModel = ({ dispatch, navigate }) => {
   const [userInfo, setUserInfo] = useState({ username: '', password: '', remember: false });
-  const [errors, setErrors] = useState({});
-  const [loginMessage, setLoginMessage] = useState('');
-  const [loginError, setLoginError] = useState('')
+  const [errors, setErrors] = useState({ username: '', password: '' });
+  const { showNotification } = useNotification()
+
+  const validateField = useCallback((name, value) => {
+    if (name === 'username') {
+      const validatedUsername = validateUsername(value);
+      return validatedUsername.isValid() ? '' : validatedUsername.getErrors().join(', ');
+    }
+    if (name === 'password') {
+      const validatedPassword = validatePassword(value);
+      return validatedPassword.isValid() ? '' : validatedPassword.getErrors().join(', ');
+    }
+    return '';
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: type === 'checkbox' ? checked : value
-    });
+    const fieldValue = type === 'checkbox' ? checked : value;
 
-    if (name === 'password') {
-      const validatedPassword = validatePassword(value);
-      setErrors({
-        ...errors,
-        password: !validatedPassword.isValid() ? validatedPassword.getErrors().join(', ') : null
-      });
-    }
-
-    if (name === 'username') {
-      const validatedUsername = validateUsername(value)
-      setErrors({
-        ...errors,
-        username: !validatedUsername.isValid() ? validatedUsername.getErrors().join(', ') : null
-      });
-    }
+    setUserInfo((prev) => ({ ...prev, [name]: fieldValue }));
+    setErrors((prev) => ({ ...prev, [name]: validateField(name, fieldValue) }));
   };
 
-  const isFormValid =
-    !errors.username &&
-    !errors.password &&
+  const isFormValid = !Object.values(errors).some((error) => error) &&
     userInfo.username &&
     userInfo.password;
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if (isFormValid) {
-      localStorage.setItem("remember", userInfo.remember);
+    if (!isFormValid) {
+      showNotification("Completa los campos con error antes de registrarte", 'error')
+      return;
+    }
 
-      if (userInfo.remember) {
-        localStorage.setItem("username", userInfo.username);
-      } else {
-        localStorage.removeItem('username');
-      }
-
-      loginUser({ username: userInfo.username, password: userInfo.password })
-        .then(({ data }) => {
-          console.log(data)
-          const { token, userid } = data;
-          dispatch({ type: 'SET_TOKEN', payload: token });
-          dispatch({ type: 'SET_USERID', payload: userid });
-          dispatch({ type: 'SET_ISLOGGED', payload: true });
-          dispatch({ type: 'SET_USERNAME', payload: userInfo.username });
-
-          setLoginMessage("Se ha logueado satisfactoriamente")
-
-          setTimeout(() => {
-            navigate('/');
-          }, 2000);
-        })
-        .catch(err => {
-          console.error(err);
-          setLoginError('Nombre de usuario o contraseña incorrectos');
-        });
+    localStorage.setItem("remember", userInfo.remember);
+    if (userInfo.remember) {
+      localStorage.setItem("username", userInfo.username);
     } else {
-      setLoginError("Completa los campos con error antes de registrarte")
+      localStorage.removeItem("username");
+    }
+
+    try {
+      const response = await loginUser({ username: userInfo.username, password: userInfo.password });
+      if (!response.isValid()) {
+        showNotification(response.error || "Error desconocido al iniciar sesión", 'error')
+        return;
+      }
+      console.log(response)
+      const { token, userid, expiration, username, message } = response;
+      dispatch({ type: "SET_TOKEN", payload: token });
+      dispatch({ type: "SET_USERID", payload: userid });
+      dispatch({ type: "SET_ISLOGGED", payload: true });
+      dispatch({ type: "SET_USERNAME", payload: username });
+
+      showNotification(message, 'success')
+      navigate("/")
+    } catch (err) {
+      console.error("Error inesperado:", err);
+      showNotification("Error inesperado al iniciar sesión", 'error');
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem('remember')) {
-      const username = localStorage.getItem('username') || '';
-      setUserInfo(prev => ({ ...prev, username }));
+    if (localStorage.getItem("remember")) {
+      const username = localStorage.getItem("username") || '';
+      setUserInfo((prev) => ({ ...prev, username }));
     }
   }, []);
 
@@ -85,10 +78,8 @@ const useLoginViewModel = ({ dispatch, navigate }) => {
     userInfo,
     handleChange,
     onSubmit,
-    loginMessage,
-    loginError,
     errors,
   };
-}
+};
 
-export default useLoginViewModel
+export default useLoginViewModel;

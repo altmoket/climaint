@@ -1,13 +1,18 @@
 import { TextField, Button, Grid, Typography, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import Notification from '../components/Notification';
 import useRegisterViewModel from '../viewModels/registerViewModel';
 
 function Register() {
-  
+
   const navigate = useNavigate();
 
-  const {onSubmit, formData, errors, handleChange, showNotification} = useRegisterViewModel({navigate})
+  const {
+    onSubmit,
+    formData,
+    errors,
+    handleChange
+  }
+    = useRegisterViewModel({ navigate })
 
   return (
     <Box sx={{
@@ -90,7 +95,6 @@ function Register() {
           </Typography>
         </Box>
       </Box>
-      {showNotification && <Notification message="Completa los campos con error antes de registrarte" severity='error' />}
     </Box>
   );
 }

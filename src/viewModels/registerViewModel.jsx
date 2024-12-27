@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { validateEmail, validatePassword, validateUsername } from "../utils/validations";
 import { registerUser } from "../utils/users";
+import { useNotification } from "../hooks/NotificationContext";
 
 
 const useRegisterViewModel = ({ navigate }) => {
@@ -10,7 +11,7 @@ const useRegisterViewModel = ({ navigate }) => {
     password: ''
   });
   const [errors, setErrors] = useState({});
-  const [showNotification, setShowNotification] = useState(false);
+  const { showNotification } = useNotification()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,27 +53,25 @@ const useRegisterViewModel = ({ navigate }) => {
     formData.email &&
     formData.password;
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (isFormValid) {
-      if (Object.keys(errors).length === 0) {
-        registerUser(formData)
-          .then((data) => {
-            navigate('/login', { state: { message: "Se ha registrado correctamente" } });
-          })
-          .catch((err) => console.error(err));
-      }
-    } else {
-      setShowNotification(true);
-      setTimeout(() => {
-        setShowNotification(false);
-      }, 2000);
+    if (!isFormValid || Object.keys(errors).length !== 0) {
+      showNotification('Arregla los campos con error antes de continuar', 'error')
+      return
     }
+
+    const response = await registerUser(formData)
+    if (!response.isValid()) {
+      showNotification(response.error || "Error desconocido al iniciar sesión", 'error')
+      return;
+    }
+
+    showNotification(response.message, 'success')
   };
 
   return {
-    onSubmit, formData, errors, handleChange, showNotification
+    onSubmit, formData, errors, handleChange
   }
 }
 
