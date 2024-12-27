@@ -73,6 +73,7 @@ const theme = createTheme({
         root: {
           boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)", // Sombra de tarjetas en modo claro
           borderRadius: "8px", // Bordes redondeados
+          backgroundColor: "#ffffff"
         },
       },
     },
