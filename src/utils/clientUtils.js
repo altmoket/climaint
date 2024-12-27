@@ -1,4 +1,4 @@
-import axiosInstance from "../axiosInstance";
+import axiosInstance from "./axiosInstance";
 
 // Fetch interests with proper error handling
 export const getInterests = async (token) => {
