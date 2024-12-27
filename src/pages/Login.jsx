@@ -1,8 +1,8 @@
 import { useGlobalContext } from '../context/globalContext';
 import { TextField, Button, Grid, Typography, Box, FormControlLabel, Checkbox, FormControl } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
-import LoadingScreen from '../components/LoadingScreen';
 import useLoginViewModel from '../viewModels/loginViewModel';
+import LoadingScreen from '../components/LoadingScreen';
 
 function Login() {
   const { dispatch } = useGlobalContext();
@@ -12,15 +12,12 @@ function Login() {
     userInfo,
     handleChange,
     onSubmit,
-    loginMessage,
-    loginError,
     errors,
+    loading
   } = useLoginViewModel({ dispatch, navigate })
 
-  if (loginMessage) {
-    return <LoadingScreen />
-  }
-
+  if (loading) return <LoadingScreen/>
+  
   return (
     <Box sx={{
       height: '100vh',

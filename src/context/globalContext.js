@@ -5,17 +5,20 @@ const GlobalContext = createContext();
 const globalReducer = (state, action) => {
   switch (action.type) {
     case 'SET_TOKEN':
-      localStorage.setItem('token', action.payload);
+      localStorage.setItem('token', action.payload || '');
       return { ...state, token: action.payload };
     case 'SET_USERID':
-      localStorage.setItem('userId', action.payload);
+      localStorage.setItem('userId', action.payload || '');
       return { ...state, userId: action.payload };
     case 'SET_ISLOGGED':
-      localStorage.setItem('isLogged', action.payload);
+      localStorage.setItem('isLogged', action.payload ? 'true' : 'false');
       return { ...state, isLogged: action.payload };
     case 'SET_USERNAME':
-      localStorage.setItem('username', action.payload);
+      localStorage.setItem('username', action.payload || '');
       return { ...state, username: action.payload };
+    case 'CLEAR_USERNAME':
+      localStorage.setItem('username', '');
+      return { ...state, username: '' };
     default:
       throw new Error(`Unknown action type: ${action.type}`);
   }
@@ -23,10 +26,10 @@ const globalReducer = (state, action) => {
 
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(globalReducer, {
-    token: localStorage.getItem('token') || null,
-    userId: localStorage.getItem('userId') || null,
-    isLogged: localStorage.getItem('isLogged') || false,
-    username: localStorage.getItem('username') || null
+    token: localStorage.getItem('token') | null,
+    userId: localStorage.getItem('userId') | null,
+    isLogged: localStorage.getItem('isLogged') === 'true',
+    username: localStorage.getItem('username')
   });
 
   return (
