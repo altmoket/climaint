@@ -28,8 +28,10 @@ const SearchBar = ({ setSearch }) => {
           type="text"
           value={info.identificacion}
           onChange={handleChange}
+          variant='outlined'
           fullWidth
           inputProps={{ maxLength: 20 }}
+          color='primary'
         />
       </Grid>
 
@@ -40,6 +42,7 @@ const SearchBar = ({ setSearch }) => {
           type="text"
           value={info.nombre}
           onChange={handleChange}
+          variant='outlined'
           fullWidth
           inputProps={{ maxLength: 50 }}
         />

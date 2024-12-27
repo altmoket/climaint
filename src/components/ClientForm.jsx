@@ -70,7 +70,7 @@ const ClientForm = ({ client, interests, onSubmit, setClient }) => {
             padding={2}
             display="flex"
             flexDirection={isXsScreen ? "column" : "row"}
-            gap={1} // Espaciado entre botones
+            gap={1}
           >
             <Button
               type="submit"

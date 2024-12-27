@@ -25,11 +25,12 @@ const Layout = () => {
           top={{ xs: '10px', md: 0 }}
           sx={{
             height: 'calc(100vh - 64px)', overflowY: 'auto', top: '64px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
             bgcolor: theme.palette.background.default,
             zIndex: 1000,
             width: '100%'
           }}>
+          {/* TODO: Fix Leftbar to works appropiately with the state in the sm screens. Tip: useHook*/}
           <Leftbar toggleBar={toggleLeftBar} />
         </Grid>
 
