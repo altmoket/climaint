@@ -36,7 +36,7 @@ function ResponsiveAppBar({ openMenu }) {
         <Box width={'100%'} display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
           <Box display={'flex'} alignItems="center">
             <Box sx={{ display: { xs: 'block', sm: 'block', md: 'none' }, mr: '5px' }}>
-              <IconButton onClick={handleOpenNavMenu} color="inherit" aria-label="open menu">
+              <IconButton onClick={handleOpenNavMenu} color={theme.palette.primary.dark} aria-label="open menu">
                 <MenuIcon fontSize="large" />
               </IconButton>
             </Box>
