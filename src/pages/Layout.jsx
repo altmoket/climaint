@@ -17,7 +17,7 @@ const Layout = () => {
         <ResponsiveAppBar openMenu={toggleLeftBar} />
       </Grid>
 
-      <Grid item sx={{ marginTop: 0 }}>
+      <Grid item sx={{ marginTop: 0, width: '100%'}}>
         <Grid item
           md={3}
           display={{ xs: isOpenLeftBar ? 'flex' : 'none', sm: isOpenLeftBar ? 'flex' : 'none', md: 'flex' }}
@@ -30,7 +30,6 @@ const Layout = () => {
             zIndex: 1000,
             width: '100%'
           }}>
-          {/* TODO: Fix Leftbar to works appropiately with the state in the sm screens. Tip: useHook*/}
           <Leftbar toggleBar={toggleLeftBar} />
         </Grid>
 

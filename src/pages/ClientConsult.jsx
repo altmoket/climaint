@@ -25,7 +25,6 @@ const ClientConsult = () => {
     return <LoadingScreen />;
   }
 
-  // TODO: Handle errors and show notifications
   const editarCliente = (id) => {
     navigate('/client-maintenance', { state: { clientId: id } });
   };

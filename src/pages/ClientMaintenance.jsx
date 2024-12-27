@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/globalContext";
-// import LoadingScreen from "../components/LoadingScreen";
 import useClientMantenanceViewModel from "../viewModels/clientMaintenanceViewModel";
 import {
     Box, Button, Card, CardHeader, Grid, TextField,
@@ -18,6 +17,7 @@ import ImageUploader from "../components/ImageUploader";
 
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import LoadingScreen from "../components/LoadingScreen";
 
 const ClientMaintenance = () => {
     const { state } = useGlobalContext();
@@ -33,7 +33,8 @@ const ClientMaintenance = () => {
         fieldsErrors,
         onSubmit,
         setClient,
-        handleChange
+        handleChange, 
+        loading
     } = useClientMantenanceViewModel({
         token: state.token,
         userId: state.userId,
@@ -41,7 +42,7 @@ const ClientMaintenance = () => {
         navigate
     })
 
-    // if (loading) return <LoadingScreen />;
+    if (loading) return <LoadingScreen />;
 
     return (
         <Box
@@ -49,8 +50,9 @@ const ClientMaintenance = () => {
             justifyContent="center"
             alignItems="center"
             marginTop={'30px'}
+            // bgcolor={'red'}
         >
-            <Card sx={{ padding: 2, margin: "1rem", boxShadow: 3 }}>
+            <Card sx={{ padding: 2, margin: "1rem"}}>
                 <CardHeader
                     title="Mantenimiento de Clientes"
                     avatar={
@@ -78,7 +80,7 @@ const ClientMaintenance = () => {
                             </Button>
                             <Button
                                 variant="outlined"
-                                color="primary"
+                                color="error"
                                 startIcon={<ArrowBackIcon />}
                                 onClick={() => navigate(-1)}
                             >
