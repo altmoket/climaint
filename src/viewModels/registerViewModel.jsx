@@ -66,13 +66,14 @@ const useRegisterViewModel = ({ navigate }) => {
 
     const response = await registerUser(formData)
 
+    setLoading(false)
+
     if (!response.isValid()) {
       showNotification(response.error || "Error desconocido al registrarse", 'error')
       return;
     }
 
     showNotification(response.message, 'success')
-    setLoading(false)
     navigate('/login')
   };
 
