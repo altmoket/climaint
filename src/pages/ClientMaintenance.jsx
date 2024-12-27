@@ -41,7 +41,7 @@ const ClientMaintenance = () => {
         clientId: location.state?.clientId,
         navigate
     })
-
+    
     if (loading) return <LoadingScreen />;
 
     return (

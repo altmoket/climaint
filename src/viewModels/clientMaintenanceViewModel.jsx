@@ -86,19 +86,15 @@ const useClientMantenanceViewModel = ({ token, userId, clientId = null, navigate
     return Object.keys(newErrors).length === 0;
   };
 
-  // Cargar intereses una sola vez
   useEffect(() => {
     const fetchInterests = async () => {
-      try {
-        const { success, data, error } = await getInterests(token);
-        if (success) {
-          setInterests(data);
-          console.info("Intereses cargados correctamente:", data);
-        } else {
-          console.error("Error fetching interests:", error);
-        }
-      } catch (err) {
-        console.error("Error al cargar los intereses:", err);
+      const { success, data, error } = await getInterests(token);
+      if (success) {
+        setInterests(data);
+        console.info("Intereses cargados correctamente:", data);
+      } else {
+        console.error("Error al cargar los intereses:", error);
+        showNotification("Error al cargar los intereses", 'error')
       }
     };
 
@@ -107,30 +103,22 @@ const useClientMantenanceViewModel = ({ token, userId, clientId = null, navigate
     }
   }, [token]);
 
-  // Cargar datos del cliente solo cuando los intereses y `clientId` estén disponibles
   useEffect(() => {
     const fetchClientData = async () => {
-      if (!clientId) return;
-
-      try {
-        const { success, data, error } = await getClient({ token, userId }, { idCliente: clientId });
-        if (success) {
-          setClient(mapClientData(data));
-          showNotification("Cliente cargado correctamente", "success");
-        } else {
-          console.error("Error fetching client:", error);
-          showNotification("Error al cargar los datos del cliente", "error");
-        }
-      } catch (err) {
-        console.error("Error al cargar los datos del cliente:", err);
+      if (!clientId) {setLoading(false) ; return};
+      const { success, data, error } = await getClient({ token, userId }, { idCliente: clientId });
+      if (success) {
+        setClient(mapClientData(data));
+        showNotification("Cliente cargado correctamente", "success");
+      } else {
+        console.error("Error fetching client:", error);
         showNotification("Error al cargar los datos del cliente", "error");
-      } finally {
-        setLoading(false);
       }
+      setLoading(false)
     };
 
     if (token && userId && interests.length > 0) {
-      setLoading(true);
+      setLoading(true)
       fetchClientData();
     }
   }, [token, userId, clientId, interests]);
