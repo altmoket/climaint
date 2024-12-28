@@ -31,7 +31,7 @@ function ResponsiveAppBar({ openMenu }) {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: '#0d1621' }}>
+    <AppBar position="static" sx={{ bgcolor: theme.palette.primary.main }}>
       <Toolbar sx={{ borderBottom: '1px solid #ffffff', borderColor: 'black', bgcolor: theme.palette.background.default }}>
         <Box width={'100%'} display={'flex'} flexDirection={'row'} alignItems={'center'} justifyContent={'space-between'}>
           <Box display={'flex'} alignItems="center">
