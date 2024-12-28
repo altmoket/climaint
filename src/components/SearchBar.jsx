@@ -20,8 +20,7 @@ const SearchBar = ({ setSearch }) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-      <Grid container spacing={2} pb={2} sx={{ zIndex: 0, position: 'relative' }}>
+    <Grid container spacing={2} pb={2} sx={{ zIndex: 0, position: 'relative' }}>
         <Grid item xs={12} sm={6} md={5}>
           <TextField
             label="Identificación"
@@ -61,7 +60,6 @@ const SearchBar = ({ setSearch }) => {
           </Button>
         </Grid>
       </Grid>
-    </Paper>
   );
 };
 

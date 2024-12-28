@@ -7,6 +7,7 @@ import {
   Divider,
   useMediaQuery,
   useTheme,
+  Paper,
 } from '@mui/material';
 import SearchBar from '../components/SearchBar';
 import ClientTable from '../components/ClientTable';
@@ -33,17 +34,20 @@ const ClientConsult = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Header navigate={navigate} />
-      <Divider />
-      <Box mt={2}>
-        <SearchBar setSearch={setSearch} />
+      <Paper elevation={1} sx={{ padding: 2, marginBottom: 2 }}>
+        <Header navigate={navigate} />
 
-      </Box>
-      <ClientTable
-        clients={clients}
-        onEdit={editarCliente}
-        onDelete={eliminarCliente}
-      />
+        <Box mt={2}>
+          <SearchBar setSearch={setSearch} />
+
+        </Box>
+        <ClientTable
+          clients={clients}
+          onEdit={editarCliente}
+          onDelete={eliminarCliente}
+        />
+      </Paper>
+
     </Box>
   );
 };
@@ -53,20 +57,20 @@ const Header = ({ navigate }) => {
   const isXsScreen = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2, alignItems: 'center' }}>
-    <Typography variant="h4">Consulta de Clientes</Typography>
-    <Stack direction={"row"} spacing={1}>
-      <Box
-        textAlign="right"
-        padding={2}
-        display="flex"
-        flexDirection={isXsScreen ? "column" : "row"}
-        gap={1}
-      >
-        <Button startIcon={<PersonAddIcon />} variant="contained" color="primary" onClick={() => navigate('/client-maintenance')}>Agregar</Button>
-        <Button startIcon={<ArrowBackIcon />} variant="outlined" color="error" onClick={() => navigate('/')}>Regresar</Button>
-      </Box>
-    </Stack>
-  </Box>
+      <Typography variant="h4">Consulta de Clientes</Typography>
+      <Stack direction={"row"} spacing={1}>
+        <Box
+          textAlign="right"
+          padding={2}
+          display="flex"
+          flexDirection={isXsScreen ? "column" : "row"}
+          gap={1}
+        >
+          <Button startIcon={<PersonAddIcon />} variant="contained" color="primary" onClick={() => navigate('/client-maintenance')}>Agregar</Button>
+          <Button startIcon={<ArrowBackIcon />} variant="outlined" color="error" onClick={() => navigate('/')}>Regresar</Button>
+        </Box>
+      </Stack>
+    </Box>
   )
 };
 
