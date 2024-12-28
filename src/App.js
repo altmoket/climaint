@@ -36,8 +36,6 @@ const AppRoutes = () => {
 }
 
 function App() {
-
-
   return (
     <ThemeProvider theme={theme}>
       <NotificationProvider>

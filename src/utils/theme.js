@@ -3,31 +3,39 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     mode: 'light',
+    primary: {
+      main: '#1976d2', // Blue
+      contrastText: '#ffffff',
+    },
+    secondary: {
+      main: '#ff9800', // Orange
+      contrastText: '#ffffff',
+    },
     background: {
-      default: "#f5f5f5",
-      paper: "#ffffff",
+      default: '#f5f5f5',
+      paper: '#ffffff',
     },
     text: {
-      primary: "#212121",
-      secondary: "#757575",
-      disabled: "#bdbdbd",
+      primary: '#212121',
+      secondary: '#757575',
+      disabled: '#bdbdbd',
     },
     success: {
-      main: "#388e3c",
+      main: '#4caf50', // Green
     },
     error: {
-      main: "#d32f2f",
+      main: '#f44336', // Red
     },
     warning: {
-      main: "#fbc02d",
+      main: '#ffeb3b', // Yellow
     },
     info: {
-      main: "#1976d2",
+      main: '#2196f3', // Light Blue
     },
-    divider: "#e0e0e0",
+    divider: '#e0e0e0',
   },
   typography: {
-    fontFamily: "Roboto, Arial, sans-serif",
+    fontFamily: 'Roboto, Arial, sans-serif',
     h5: {
       fontWeight: 600,
     },
@@ -39,20 +47,20 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          "& .MuiInputBase-root": {
-            borderRadius: "8px",
-            backgroundColor: "#ffffff",
-            color: "#212121",
+          '& .MuiInputBase-root': {
+            borderRadius: '8px',
+            backgroundColor: '#ffffff',
+            color: '#212121',
           },
-          "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-              borderColor: "#e0e0e0",
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#e0e0e0',
             },
-            "&:hover fieldset": {
-              borderColor: "#bdbdbd",
+            '&:hover fieldset': {
+              borderColor: '#bdbdbd',
             },
-            "&.Mui-focused fieldset": {
-              borderColor: "#1976d2",
+            '&.Mui-focused fieldset': {
+              borderColor: '#1976d2',
             },
           },
         },
@@ -61,8 +69,8 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: "8px",
-          textTransform: "none",
+          borderRadius: '8px',
+          textTransform: 'none',
         },
       },
     },
