@@ -12,7 +12,6 @@ import {
     Divider,
     useMediaQuery,
     useTheme,
-    IconButton
 } from "@mui/material";
 import ImageUploader from "../components/ImageUploader";
 
@@ -34,7 +33,7 @@ const ClientMaintenance = () => {
         fieldsErrors,
         onSubmit,
         setClient,
-        handleChange,
+        handleChange, 
         loading
     } = useClientMantenanceViewModel({
         token: state.token,
@@ -42,7 +41,7 @@ const ClientMaintenance = () => {
         clientId: location.state?.clientId,
         navigate
     })
-
+    
     if (loading) return <LoadingScreen />;
 
     return (
@@ -51,7 +50,7 @@ const ClientMaintenance = () => {
             justifyContent="center"
             alignItems="center"
             marginTop={'30px'}        >
-            <Card sx={{ padding: 2, margin: "1rem", maxWidth: 800, width: '100%' }}>
+            <Card sx={{ padding: 2, margin: "1rem", maxWidth: 800, width: '100%', boxShadow: 3 }}>
                 {isXsScreen && (
                     <Box
                         display="flex"
