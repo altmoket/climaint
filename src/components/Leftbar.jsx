@@ -23,10 +23,10 @@ const Leftbar = ({ toggleBar }) => {
         alignItems={'center'}
         alignSelf={'center'}
       >
-        <IconButton>
+        <IconButton sx={{ color: theme.palette.primary.main }}>
           <AccountCircleIcon sx={{ width: '100%', height: '100%', maxWidth: '100px' }} />
         </IconButton>
-        <Typography color={theme.palette.text.secondary} variant="h5">{state.username}</Typography>
+        <Typography color={theme.palette.primary.main} variant="h5">{state.username}</Typography>
       </Box>
       <Divider></Divider>
       <Box bgcolor={theme.palette.background.paper} height={'100%'}>
@@ -45,10 +45,10 @@ const Leftbar = ({ toggleBar }) => {
               >
                 <ListItem disablePadding>
                   <ListItemButton>
-                    <ListItemIcon>
+                    <ListItemIcon sx={{ color: theme.palette.primary.main }}>
                       {icon}
                     </ListItemIcon>
-                    <ListItemText primary={label} sx={{ color: theme.palette.text.secondary, margin: 0 }} />
+                    <ListItemText primary={label} sx={{ color: theme.palette.text.primary, margin: 0 }} />
                   </ListItemButton>
                 </ListItem>
               </RouterLink>
