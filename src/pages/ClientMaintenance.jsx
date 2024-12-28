@@ -78,7 +78,7 @@ const ClientMaintenance = () => {
                             image={client.imagen}
                             setImage={(imagen) => setClient((prev) => ({ ...prev, imagen }))}
                         />
-                        <Typography variant={'h5'} sx={{ ml: 2, fontWeight: "bold" }}>
+                        <Typography variant={'h6'} sx={{ ml: 2, fontWeight: "bold" }}>
                             Mantenimiento de Clientes
                         </Typography>
                     </Box>
