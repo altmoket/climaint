@@ -8,14 +8,15 @@ import {
   TableRow,
   Paper,
   IconButton,
-  styled,
-  tableCellClasses,
   Stack,
-  Button
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 const DeleteConfirmationModal = ({ onDelete, open, onClose }) => {
   return (
@@ -35,26 +36,6 @@ const DeleteConfirmationModal = ({ onDelete, open, onClose }) => {
     </Dialog>
   );
 };
-
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
 
 const ClientTable = ({ clients, onEdit, onDelete }) => {
   const [openModal, setOpenModal] = useState(false);
@@ -77,7 +58,7 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
 
   return (
     <TableContainer component={Paper}>
-      <DeleteConfirmationModal  onDelete={handleDeleteModal} open={openModal} onClose={handleCloseModal}></DeleteConfirmationModal>
+      <DeleteConfirmationModal onDelete={handleDeleteModal} open={openModal} onClose={handleCloseModal}></DeleteConfirmationModal>
       <Table size='small'>
         <TableHead>
           <TableRow>
@@ -86,17 +67,17 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
               { label: 'NOMBRE COMPLETO', width: '45%' },
               { label: 'ACCIONES', width: '20%', align: 'center' }
             ].map(({ label, width, align = 'left' }) => (
-              <StyledTableCell key={label} sx={{ width }} align={align}>{label}</StyledTableCell>
+              <TableCell key={label} sx={{ width, backgroundColor: 'success.dark', color: 'common.white' }} align={align}>{label}</TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
           {clients.length > 0 ? (
             clients.map((client) => (
-              <StyledTableRow key={client.id}>
-                <StyledTableCell>{client.identificacion}</StyledTableCell>
-                <StyledTableCell>{`${client.nombre} ${client.apellidos}`}</StyledTableCell>
-                <StyledTableCell>
+              <TableRow key={client.id} sx={{ '&:nth-of-type(odd)': { backgroundColor: 'action.hover' } }}>
+                <TableCell>{client.identificacion}</TableCell>
+                <TableCell>{`${client.nombre} ${client.apellidos}`}</TableCell>
+                <TableCell>
                   <Stack direction={'row'}>
                     <IconButton aria-label="edit"
                       variant="text"
@@ -113,8 +94,8 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
                     </IconButton>
                   </Stack>
 
-                </StyledTableCell>
-              </StyledTableRow>
+                </TableCell>
+              </TableRow>
             ))
           ) : (
             <TableRow>
