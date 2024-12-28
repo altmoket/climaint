@@ -15,7 +15,7 @@ const Leftbar = ({ toggleBar }) => {
   const { state } = useGlobalContext()
 
   return (
-    <Box sx={{ height: '100vh', width: '100%' }} display={'flex'} flexDirection={'column'}
+    <Box sx={{ height: '100vh', width: '100%', boxShadow: 3 }} display={'flex'} flexDirection={'column'}
       bgcolor={theme.palette.background.paper}>
       <Box padding={1}
         display={'flex'}

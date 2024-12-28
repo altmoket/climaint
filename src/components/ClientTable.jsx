@@ -57,7 +57,7 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
   };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
       <DeleteConfirmationModal onDelete={handleDeleteModal} open={openModal} onClose={handleCloseModal}></DeleteConfirmationModal>
       <Table size='small'>
         <TableHead>
