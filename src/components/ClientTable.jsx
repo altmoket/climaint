@@ -78,7 +78,7 @@ const ClientTable = ({ clients, onEdit, onDelete }) => {
                 <TableCell>{client.identificacion}</TableCell>
                 <TableCell>{`${client.nombre} ${client.apellidos}`}</TableCell>
                 <TableCell>
-                  <Stack direction={'row'}>
+                  <Stack direction={'row'} alignContent={'center'} justifyContent={'center'}>
                     <IconButton aria-label="edit"
                       variant="text"
                       color="primary"
