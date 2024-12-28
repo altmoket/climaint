@@ -12,6 +12,7 @@ import {
     Divider,
     useMediaQuery,
     useTheme,
+    IconButton
 } from "@mui/material";
 import ImageUploader from "../components/ImageUploader";
 
@@ -33,7 +34,7 @@ const ClientMaintenance = () => {
         fieldsErrors,
         onSubmit,
         setClient,
-        handleChange, 
+        handleChange,
         loading
     } = useClientMantenanceViewModel({
         token: state.token,
@@ -41,7 +42,7 @@ const ClientMaintenance = () => {
         clientId: location.state?.clientId,
         navigate
     })
-    
+
     if (loading) return <LoadingScreen />;
 
     return (
@@ -49,10 +50,34 @@ const ClientMaintenance = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            marginTop={'30px'}
-            // bgcolor={'red'}
-        >
-            <Card sx={{ padding: 2, margin: "1rem"}}>
+            marginTop={'30px'}        >
+            <Card sx={{ padding: 2, margin: "1rem", maxWidth: 800, width: '100%' }}>
+                {isXsScreen && (
+                    <Box
+                        display="flex"
+                        justifyContent="flex-end"
+                        padding={2}
+                        gap={1}
+                    >
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            startIcon={<SaveIcon />}
+                            onClick={onSubmit}
+                        >
+                            Guardar
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            color="error"
+                            startIcon={<ArrowBackIcon />}
+                            onClick={() => navigate(-1)}
+                        >
+                            Regresar
+                        </Button>
+                    </Box>
+                )}
                 <CardHeader
                     title="Mantenimiento de Clientes"
                     avatar={
@@ -62,33 +87,35 @@ const ClientMaintenance = () => {
                         />
                     }
                     action={
-                        <Box
-                            textAlign="right"
-                            padding={2}
-                            display="flex"
-                            flexDirection={isXsScreen ? "column" : "row"}
-                            gap={1}
-                        >
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                startIcon={<SaveIcon />}
-                                onClick={onSubmit}
+                        !isXsScreen && (
+                            <Box
+                                textAlign="right"
+                                padding={2}
+                                display="flex"
+                                flexDirection="row"
+                                gap={1}
                             >
-                                Guardar
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="error"
-                                startIcon={<ArrowBackIcon />}
-                                onClick={() => navigate(-1)}
-                            >
-                                Regresar
-                            </Button>
-                        </Box>
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<SaveIcon />}
+                                    onClick={onSubmit}
+                                >
+                                    Guardar
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    startIcon={<ArrowBackIcon />}
+                                    onClick={() => navigate(-1)}
+                                >
+                                    Regresar
+                                </Button>
+                            </Box>
+                        )
                     }
-                    titleTypographyProps={{ variant: "h5", fontWeight: "bold" }}
+                    titleTypographyProps={{ variant: isXsScreen ? "h6" : "h5", fontWeight: "bold" }}
                 />
                 <Divider />
                 <CardContent>
@@ -196,7 +223,5 @@ const FormField = ({ label, name, type, value, onChange, error, helperText, mult
         />
     </Grid>
 );
-
-
 
 export default ClientMaintenance;
