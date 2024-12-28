@@ -3,7 +3,6 @@ import { TextField, Button, Grid, Typography, Box, FormControlLabel, Checkbox, F
 import { useNavigate, Link } from 'react-router-dom';
 import useLoginViewModel from '../viewModels/loginViewModel';
 import LoadingScreen from '../components/LoadingScreen';
-import { Image } from '@mui/icons-material';
 
 function Login() {
   const { state, dispatch } = useGlobalContext();
