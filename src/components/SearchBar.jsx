@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, Paper } from '@mui/material';
 
 const SearchBar = ({ setSearch }) => {
   const [info, setInfo] = useState({ nombre: "", identificacion: "" });
@@ -20,46 +20,48 @@ const SearchBar = ({ setSearch }) => {
   };
 
   return (
-    <Grid container spacing={2} pb={2} sx={{ zIndex: 0, position: 'relative' }}>
-      <Grid item xs={12} sm={6} md={5}>
-        <TextField
-          label="Identificación"
-          name="identificacion"
-          type="text"
-          value={info.identificacion}
-          onChange={handleChange}
-          variant='outlined'
-          fullWidth
-          inputProps={{ maxLength: 20 }}
-          color='primary'
-        />
-      </Grid>
+    <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+      <Grid container spacing={2} pb={2} sx={{ zIndex: 0, position: 'relative' }}>
+        <Grid item xs={12} sm={6} md={5}>
+          <TextField
+            label="Identificación"
+            name="identificacion"
+            type="text"
+            value={info.identificacion}
+            onChange={handleChange}
+            variant='outlined'
+            fullWidth
+            inputProps={{ maxLength: 20 }}
+            color='primary'
+          />
+        </Grid>
 
-      <Grid item xs={12} sm={6} md={5}>
-        <TextField
-          label="Nombre"
-          name="nombre"
-          type="text"
-          value={info.nombre}
-          onChange={handleChange}
-          variant='outlined'
-          fullWidth
-          inputProps={{ maxLength: 50 }}
-        />
-      </Grid>
+        <Grid item xs={12} sm={6} md={5}>
+          <TextField
+            label="Nombre"
+            name="nombre"
+            type="text"
+            value={info.nombre}
+            onChange={handleChange}
+            variant='outlined'
+            fullWidth
+            inputProps={{ maxLength: 50 }}
+          />
+        </Grid>
 
-      <Grid item xs={12} sm={12} md={2}>
-        <Button
-          startIcon={<SearchIcon />}
-          variant='outlined'
-          size='large'
-          sx={{ height: "100%", width: "100%" }}
-          onClick={handleSearchClick}
-        >
-          Buscar
-        </Button>
+        <Grid item xs={12} sm={12} md={2}>
+          <Button
+            startIcon={<SearchIcon />}
+            variant='contained'
+            size='large'
+            sx={{ height: "100%", width: "100%" }}
+            onClick={handleSearchClick}
+          >
+            Buscar
+          </Button>
+        </Grid>
       </Grid>
-    </Grid>
+    </Paper>
   );
 };
 
