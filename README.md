@@ -1,7 +1,5 @@
 # CLIMAINT
 
-# Aplicación de Gestión de Clientes
-
 ## Descripción
 
 Esta es una aplicación desarrollada en React para gestionar clientes. Permite realizar operaciones básicas como listar, eliminar, actualizar y crear nuevos registros de clientes. La aplicación está diseñada para ser intuitiva y fácil de usar, facilitando la administración de la información de los clientes.
