@@ -1,15 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Grid, useTheme } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import Leftbar from '../components/Leftbar';
 
 const Layout = () => {
-  const [isOpenLeftBar, setIsOpenLeftBar] = useState(false)
-  const theme = useTheme()
+  const [isOpenLeftBar, setIsOpenLeftBar] = useState(false);
+  const theme = useTheme();
+  const leftBarRef = useRef(null);
+
   const toggleLeftBar = () => {
-    setIsOpenLeftBar(prev => !prev)
-  }
+    setIsOpenLeftBar(prev => !prev);
+  };
+
+  const handleClickOutside = (event) => {
+    if (leftBarRef.current && !leftBarRef.current.contains(event.target)) {
+      setIsOpenLeftBar(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpenLeftBar) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpenLeftBar]);
 
   return (
     <Grid container direction="column">
@@ -17,18 +37,21 @@ const Layout = () => {
         <ResponsiveAppBar openMenu={toggleLeftBar} />
       </Grid>
 
-      <Grid item sx={{ marginTop: 0, width: '100%'}}>
+      <Grid item sx={{ marginTop: 0, width: '100%' }}>
         <Grid item
+          ref={leftBarRef}
           md={3}
           display={{ xs: isOpenLeftBar ? 'flex' : 'none', sm: isOpenLeftBar ? 'flex' : 'none', md: 'flex' }}
           position={{ xs: "absolute", md: "fixed" }}
           top={{ xs: '10px', md: 0 }}
           sx={{
-            height: 'calc(100vh - 64px)', overflowY: 'auto', top: '64px',
+            height: { xs: 'calc(100vh - 56px)', sm: 'calc(100vh - 64px)', md: 'calc(100vh - 64px)' }, // Adjust height based on breakpoints
+            overflowY: 'auto',
+            top: { xs: '56px', sm: '64px', md: '64px' }, // Adjust top based on breakpoints
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
             bgcolor: theme.palette.background.default,
             zIndex: 1000,
-            width: '100%'
+            width: { xs: '80%', sm: '80%', md: '100%' } // Adjust width for xs and sm screens
           }}>
           <Leftbar toggleBar={toggleLeftBar} />
         </Grid>
