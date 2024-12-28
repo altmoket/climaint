@@ -12,6 +12,8 @@ const ClientImage = ({ base64Image }) => {
         justifyContent: 'center',
         alignItems: 'center',
         overflow: 'hidden',
+        borderRadius: '50%', // Round the image perfectly
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', // Add box shadow
       }}
     >
       {base64Image ? (
@@ -22,6 +24,7 @@ const ClientImage = ({ base64Image }) => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            borderRadius: '50%', // Round the image perfectly
           }}
         />
       ) : (
