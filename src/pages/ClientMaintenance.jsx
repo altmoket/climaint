@@ -2,16 +2,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/globalContext";
 import useClientMantenanceViewModel from "../viewModels/clientMaintenanceViewModel";
 import {
-    Box, Button, Card, CardHeader, Grid, TextField,
+    Box, Button, Paper, Grid, TextField,
     Select,
     MenuItem,
     FormControl,
     InputLabel,
     FormHelperText,
-    CardContent,
     Divider,
     useMediaQuery,
     useTheme,
+    Stack,
+    Typography
 } from "@mui/material";
 import ImageUploader from "../components/ImageUploader";
 
@@ -25,7 +26,7 @@ const ClientMaintenance = () => {
     const navigate = useNavigate();
 
     const theme = useTheme();
-    const isXsScreen = useMediaQuery(theme.breakpoints.down("sm"));
+    const isSmScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
     const {
         client,
@@ -50,14 +51,9 @@ const ClientMaintenance = () => {
             justifyContent="center"
             alignItems="center"
             marginTop={'30px'}        >
-            <Card sx={{ padding: 2, margin: "1rem", maxWidth: 800, width: '100%', boxShadow: 3 }}>
-                {isXsScreen && (
-                    <Box
-                        display="flex"
-                        justifyContent="flex-end"
-                        padding={2}
-                        gap={1}
-                    >
+            <Paper elevation={1} sx={{ padding: 2, margin: "1rem", width: '100%'}}>
+                {isSmScreen && (
+                    <Stack direction="row" spacing={1} sx={{ mb: 3, justifyContent: 'center' }}>
                         <Button
                             type="submit"
                             variant="contained"
@@ -75,49 +71,41 @@ const ClientMaintenance = () => {
                         >
                             Regresar
                         </Button>
-                    </Box>
+                    </Stack>
                 )}
-                <CardHeader
-                    title="Mantenimiento de Clientes"
-                    avatar={
+                <Box display="flex" alignItems="center" justifyContent={isSmScreen ? 'center':"space-between"} mb={3}>
+                    <Box display="flex" alignItems="center">
                         <ImageUploader
                             image={client.imagen}
                             setImage={(imagen) => setClient((prev) => ({ ...prev, imagen }))}
                         />
-                    }
-                    action={
-                        !isXsScreen && (
-                            <Box
-                                textAlign="right"
-                                padding={2}
-                                display="flex"
-                                flexDirection="row"
-                                gap={1}
+                        <Typography variant={'h5'} sx={{ ml: 2, fontWeight: "bold" }}>
+                            Mantenimiento de Clientes
+                        </Typography>
+                    </Box>
+                    {!isSmScreen && (
+                        <Stack direction="row" spacing={1}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                startIcon={<SaveIcon />}
+                                onClick={onSubmit}
                             >
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    startIcon={<SaveIcon />}
-                                    onClick={onSubmit}
-                                >
-                                    Guardar
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    color="error"
-                                    startIcon={<ArrowBackIcon />}
-                                    onClick={() => navigate(-1)}
-                                >
-                                    Regresar
-                                </Button>
-                            </Box>
-                        )
-                    }
-                    titleTypographyProps={{ variant: isXsScreen ? "h6" : "h5", fontWeight: "bold" }}
-                />
-                <Divider />
-                <CardContent>
+                                Guardar
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                startIcon={<ArrowBackIcon />}
+                                onClick={() => navigate(-1)}
+                            >
+                                Regresar
+                            </Button>
+                        </Stack>
+                    )}
+                </Box>
+                <Box>
                     <form>
                         <Grid container spacing={2}>
                             {[
@@ -198,8 +186,8 @@ const ClientMaintenance = () => {
                             ))}
                         </Grid>
                     </form>
-                </CardContent>
-            </Card>
+                </Box>
+            </Paper>
         </Box>
     );
 };
