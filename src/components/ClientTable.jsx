@@ -13,7 +13,8 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle
+  DialogTitle,
+  Typography
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -21,9 +22,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const DeleteConfirmationModal = ({ onDelete, open, onClose }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>¿Estás seguro de que deseas eliminar a este cliente?</DialogTitle>
+      <DialogTitle>
+        <Typography variant="h6" fontWeight="bold">
+          ¿Estás seguro de que deseas eliminar a este cliente?
+        </Typography>
+      </DialogTitle>
       <DialogContent>
-        <p>Esta acción no se puede deshacer.</p>
+        <Typography variant="body1">
+          Esta acción no se puede deshacer.
+        </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} variant="contained" color="primary">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, Grid, Paper } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 
 const SearchBar = ({ setSearch }) => {
   const [info, setInfo] = useState({ nombre: "", identificacion: "" });
